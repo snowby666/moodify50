@@ -46,10 +46,10 @@
 
 ## Project Overview
 
-<img src="./assets/demo1.png" width="100%" height="auto" style="margin-bottom: 10px; border-radius: 15px; border: 2px solid #fff;">
-<img src="./assets/demo2.png" width="100%" height="auto" style="margin-bottom: 10px; border-radius: 15px; border: 2px solid #fff;">
-<img src="./assets/demo3.png" width="100%" height="auto" style="margin-bottom: 10px; border-radius: 15px; border: 2px solid #fff;">
-<img src="./assets/demo4.png" width="100%" height="auto" style="margin-bottom: 10px; border-radius: 15px; border: 2px solid #fff;">
+<kbd style="margin-bottom: 10px;"><img src="./assets/demo1.png" width="100%" height="auto"></kbd>
+<kbd style="margin-bottom: 10px;"><img src="./assets/demo2.png" width="100%" height="auto"></kbd>
+<kbd style="margin-bottom: 10px;"><img src="./assets/demo3.png" width="100%" height="auto"></kbd>
+<kbd style="margin-bottom: 10px;"><img src="./assets/demo4.png" width="100%" height="auto"></kbd>
 
 The project consists of multiple files and directories, each serving a specific purpose in the overall architecture of the platform. The main directory contains the following subdirectories:
 
