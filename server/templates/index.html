@@ -1,0 +1,2173 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/main.css' %}?{% now 'U' %}">
+
+<div class="mega-container">
+  <div class="container">
+    <iframe frameborder="0" id="embed-iframe" allowtransparency="true" allow="encrypted-media"></iframe>
+    <div class="music-player-container">
+      
+      <div class="list-of-saved-playlists">
+        <div class="header">
+          <h3 style="text-align: center;"><i class="fas fa-heart"></i> Your Favorites</h3>
+        </div>
+        <div class="allPlaylists">
+        </div>
+      </div>
+
+      <div class="music-player">
+
+        <div class="search-bar">
+          <form id="searchItems" action="{% url 'server:search' %}" method="post" style="display: flex; align-items: center;" autocomplete="off">
+            {% csrf_token %}
+            <input type="text" id="searchInput" placeholder="Search for artists, songs or playlists" autocomplete="off">
+            <button class="scale-btn" type="submit"><i class="fas fa-search"></i></button>
+          </form>
+        </div>
+
+        <div class="search-results">
+          <div class="music-nav">
+          <h3 style="padding: 15px;">Search Results</h3>
+          <button class="back-nav-button scale-btn" onclick="backToMusicPlayer();">Homeㅤ<i class="fa-solid fa-chevron-right"></i></button>
+          </div>
+          <div class="search-results-container">
+            <div class="result-row">
+              <div class="top-result">
+              </div>
+              <div class="related-songs">
+                <h4>Related Songs</h4>
+                <div class="related-songs-list">
+                </div>
+              </div>
+            </div>
+            <div class="result-row" style="flex-direction: column !important;">
+              <h4>Artists</h4>
+              <div class="artists"></div>
+            </div>
+            <div class="result-row" style="flex-direction: column !important;">
+              <h4>Albums</h4>
+              <div class="albums"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="artistProfile" style="display: none;">
+          <div class="music-nav">
+            <button class="back-nav-button scale-btn" onclick="backToSearch();"><i class="fa-solid fa-chevron-left"></i>ㅤSearch</button>
+            <button class="back-nav-button scale-btn" onclick="backToMusicPlayer();">Homeㅤ<i class="fa-solid fa-chevron-right"></i></button>
+          </div>
+          <div class="artist-profile">
+
+            <div class="artist-info">
+              <div class="artist-details">
+                <h3></h3>
+                <p></p>
+              </div>
+            </div>
+
+            <div class="artist-top-tracks">
+              <h4>Popular</h4>
+              <div class="top-tracks" style="flex-direction: row !important; height: 240px;">
+
+              </div>
+            </div>
+            
+            <div class="artist-albums">
+              <h4>Albums, Singles & EPs</h4>
+              <div class="albums2"></div>
+            </div>
+
+            <div class="artist-related-artists">
+              <h4>Related Artists</h4>
+              <div class="related-artists"></div>
+            </div>
+
+            <div class="artist-appears-on">
+              <h4>Appears On</h4>
+              <div class="appears-on"></div>
+            </div>
+
+            <div class="artist-about">
+              <h4>About</h4>
+              <p class="brief"></p>
+              <p class="monthlyListeners"></p>
+              <div class="about">
+              <div class="about-text" style="white-space: wrap;"></div>
+              </div>
+            </div>
+            <a class="load-more" onclick="ShowLongAbout();">Load more</a>
+          </div>
+        </div>
+
+        <div class="lyrics-container" style="display: none;">
+          <div class="lyrics-content">
+            <div class="lyrics-header">
+              <h3>No playing song</h3>
+            </div>
+            <div class="lyrics-body">
+            </div>
+          </div>
+        </div>
+
+        <div class="queue-menu" style="display: none;">
+          <div class="now-playing">
+            <h3>Now Playing</h3>
+            <ul id="now-playing">
+            </ul>
+          </div>
+          <div class="playing-next">
+            <h3>Playing Next</h3>
+            <ul id="playing-next">
+            </ul>
+          </div>
+          <button class="clear-queue">Clear queue</button>
+          <button class="add-playlist">Add playlist to queue</button>
+          <button class="add-track">Add selected song to queue</button>
+          <button class="close-queue">Close</button>
+        </div>
+
+        <div class="music-player-content">
+
+          <div class="topBar">
+            <div>
+            <p style="color: #fff; text-align: center;">Let's explore your inside symphony, 
+              {% if user.social_auth.all.0.provider == 'spotify' %}
+                  {{ user.first_name }} {{ user.last_name }}
+              {% else %}
+                  {{ user.username }}
+              {% endif %}
+            </p>
+            </div>
+            <div style="display: flex; justify-content: center; align-items: center; flex-direction: row; text-align: center;"> 
+              <div class="edit-btn">
+                <a href="{% url 'server:edit' %}" class="btn btn-primary" style="border-radius: 10px;">
+                  <span class="text-neon" style="font-size: 16px;"><i class="fas fa-user-cog"></i> Edit</span>
+                </a>
+              </div>
+
+              <div class="logout-btn">
+                <form action="{% url 'server:logout' %}" method="post">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-primary" style="border-radius: 10px; margin:0 auto; width: 100%;">
+                    <span class="text-neon" style="font-size: 16px;"><i class="fas fa-sign-out-alt"></i> Logout</span>
+                  </button>
+                </form>
+              </div>
+
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; flex-wrap: nowrap; height: 55vh;">
+            <div class="music-info">
+              <img id="playlist-img-cover" alt="Spotify" style='display:none;'>
+              <div class="default-message">
+              </div>
+              
+              <div id="playlist-info">
+              </div>
+
+            </div>
+
+            <form id="generator" action="{% url 'server:generate' %}" method="post" style="margin-top: 15px;">
+              {% csrf_token %}
+              <div class="form-control magic">
+                <div>
+                  <select class="form-control-option" id="mood" name="mood">
+                    <option value="energetic">Energetic</option>
+                    <option value="happy">Happy</option>
+                    <option value="sad">Sad</option>
+                    <option value="depressed">Depressed</option>
+                  </select>
+                </div>
+                <div>
+                  <select class="form-control-option" id="type" name="type">
+                    <option value="most_popular">Most Popular</option>
+                    <option value="least_popular">Least Popular</option>
+                  </select>
+                </div>
+                <div>
+                  <button id="generate-btn" type="submit" class="btn btn-primary" style="border-radius: 10px; height: 70%;">
+                    <span class="text-neon"><i class="fa-solid fa-stars"></i> Generate</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+         </div>
+       
+        </div>
+      </div>
+
+      <div class="playlist" style="text-align:center;">
+
+        <div class="header" style="display: flex; justify-content: center; align-items: center;">
+          <h3> Current Playlist</h3> 
+          <button class="refreshButton scale-btn"
+            onclick="refreshPlaylist();" title="Refresh current playlist"><i class="fas fa-sync-alt"></i>
+          </button>
+        </div>
+        
+          
+        <div id='notify'style='display:none;'>
+          <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <p style="margin-top: 10px;">Generating your playlist...</p>
+        </div>
+        <div id="playlist-container">
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-left">
+      <div class="music-info">
+        <img class="img-cover" alt="Spotify" style='display:none;'>
+        <div class="default-message">
+        </div>
+        <div class="music-details-footer" style='display:none;'>
+          <div class="title-container">
+          <span class="title" onclick="loadSearchData(this, 'album');"></span>
+          </div>
+          <h2 class="artist" onclick="loadSearchData(this, 'artist');"></h2>
+        </div>
+      </div>
+    </div>
+    <div class="footer-mid">
+      <div class="music-controls">
+        <button class="shuffle" title="Shuffle mode"><i class="fas fa-random"></i></button>
+        <button class="on-repeat" title="Repeat this track"><i class="fas fa-redo"></i></button>
+        <button class="prevS" title="Play previous track"><i class="fas fa-step-backward"></i></button>
+        <button class="play scale-btn" title="Play"><i class="fas fa-play"></i></button>
+        <button class="nextS" title="Play next track"><i class="fas fa-step-forward"></i></button>
+        <button class="lyrics" title="Show lyrics"><i class="fa-light fa-microphone-stand"></i></button>
+        <button class="queue" title="Add track to queue"><i class="fas fa-list"></i></button>
+        <button class="menu-toggle"><i class="fas fa-bars"></i></button>
+      </div>
+      <div class="progress-bar">
+        <div class="progress"></div>
+        <div class="progress-dot"></div>
+        <span class="progress-time current-time">0:00</span>
+        <span class="progress-time duration">0:00</span>
+      </div>
+    </div>
+    <div class="footer-right">
+      <div class="playlist-buttons">
+        <button class="remove btn btn-primary contrast-btn scale-btn" title="Remove from this playlist"><i class="fas fa-trash"></i></button>
+
+        <button type="button" class="btn btn-primary create-playlist-btn contrast-btn scale-btn" style="border-radius: 10px;">
+          <span><i class="fas fa-plus"></i> Create Playlist</span>
+        </button>
+        
+        <div class="custom-modal" id="createPlaylistModal">
+          <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3 style="margin: 10px;">Create New Playlist</h3>
+            <form id="createPlaylistModalForm" action="{% url 'server:createPlaylist' %}" method="post" autocomplete="off">
+              {% csrf_token %}
+              <div class="form-group">
+                <input type="text" class="modal-prompt" id="playlistName" placeholder="Enter playlist name" required>
+              </div>
+              <div style="display: flex;
+              justify-content: space-between;
+              flex-direction: row;">
+              <button type="button" class="btn btn-secondary close-modal">Cancel</button>
+              <button type="submit" class="btn btn-primary create-playlist-modal-btn">Create</button>
+              </div>
+            </form>
+          </div>
+        </div>
+    
+        <button type="button" class="btn btn-primary save-to-playlist-btn contrast-btn scale-btn" style="border-radius: 10px;">
+          <span><i class="fas fa-save"></i> Save to Playlist</span>
+        </button>
+
+        <div class="custom-modal" id="saveToPlaylistModal">
+          <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3 style="margin: 10px;">Save your current playlist to</h3>
+            <form id="saveToPlaylistModalForm" action="{% url 'server:saveToPlaylist' %}" method="post" autocomplete="off">
+              {% csrf_token %}
+              <div class="custom-select" id="available-playlist">
+                <div class="selected-option">Select playlist</div>
+                <div class="options"></div>
+              </div>
+              <div style="display: flex;
+              justify-content: space-between;
+              flex-direction: row;">
+              <button type="button" class="btn btn-secondary close-modal">Cancel</button>
+              <button type="submit" class="btn btn-primary create-playlist-modal-btn">Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+
+          // ------------------------------------------------------------------------- //
+        // YES I literally built a music player from scratch and it's DOPE right :D  //
+      // Author: Ngo Dinh Gia Bao (https://github.com/snowby666)                   //
+    // ------------------------------------------------------------------------- //
+
+    // Initializing
+    var queueList = [];
+    var trackList = [];
+    var savedPlaylist = [];
+    var currentTrackIndex = 0;
+    var currentTrack, prevTrackIndex, currentArtist, currentAlbum, currentTrackImage, currentReleaseDate;
+    var currentTrackDuration = null;
+    var currentLyricsDict = {};
+    var newTrackUrl = null;
+    var currentPlaylistId = null;
+    var newTrack =  document.querySelector('#embed-iframe');
+
+    const progress = document.querySelector('.progress');
+    const currentTimeDisplay = document.querySelector('.current-time');
+    const durationDisplay = document.querySelector('.duration');
+    const progressBar = document.querySelector('.progress-bar');
+    const progressDot = document.querySelector('.progress-dot');
+
+    const removeButton = document.querySelector('.remove');
+    const onRepeatButton = document.querySelector('.on-repeat');
+    const playButton = document.querySelector('.play');
+    const prevButton = document.querySelector('.prevS');
+    const nextButton = document.querySelector('.nextS');
+    const shuffleButton = document.querySelector('.shuffle');
+    const lyricsButton = document.querySelector('.lyrics');
+    const queueButton = document.querySelector('.queue');
+    const generateButton = document.querySelector('#generate-btn');
+
+    const musicPlayer = document.querySelector('.music-player');
+    const searchResultsContainer = document.querySelector('.search-results-container');
+
+    var progressInterval;
+    var timeOut;
+    let isShuffled = false;
+    let isPlaying = false;
+    let totalDuration = null;
+    var isOnRepeat = false;
+    var queueClicked = false;
+    var lyricsClicked = false;
+    var isRefreshedPlaylist = false;
+    var isTrackChanged = false;
+    var cancelGenerate = false;
+
+    const menuToggle = document.querySelector('.menu-toggle');
+    const additionalControls = document.querySelectorAll('.remove, .on-repeat, .shuffle, .queue');
+
+    const createPlaylistBtn = document.querySelector('.create-playlist-btn');
+    const createPlaylistModal = document.querySelector('#createPlaylistModal');
+    const createPlaylistModalForm = document.querySelector('#createPlaylistModalForm');
+    const closeModalBtns = document.querySelectorAll('.close-modal');
+    const createPlaylistModalBtn = document.querySelector('.create-playlist-modal-btn');
+
+    const saveToPlaylistBtn = document.querySelector('.save-to-playlist-btn');
+    const saveToPlaylistModal = document.querySelector('#saveToPlaylistModal');
+    const saveToPlaylistModalForm = document.querySelector('#saveToPlaylistModalForm');
+
+    const optionsContainer = document.querySelector('#available-playlist .options');
+    const selectedOption = document.querySelector('#available-playlist .selected-option');
+
+    var selectedPlaylistId;
+
+    var loadingTrack;
+    var newPosition = 0;
+    var pauseTime = 0;
+
+    var renderState = true;
+
+    function RenderSavedPlaylist() {
+        renderState = false;
+        $.ajax({
+          type: 'GET',
+          url: '{% url "server:loadFavorites" %}',
+          success: function(response) {
+            savedPlaylist = response.savedPlaylist;
+            renderState = true;
+            if (savedPlaylist.length === 0) {
+              $('.allPlaylists').append('<p style="text-align: center;">No saved playlists</p>');
+            } else {
+              $('.allPlaylists').empty();
+              for (const playlist of savedPlaylist) {
+                let imgSrc = "https://picsum.photos/400/400.webp/?music&" + playlist.id;
+                $('.allPlaylists').append(
+                  `<div class="playlist-box" data-playlist-id="${playlist.id}" data-playlist-name="${playlist.playlist}">
+                  <img src="${imgSrc}" alt="Playlist" loading="lazy" onload="$(this).next().show(); $(this).next().next().show();"
+                    data-playlist-id="${playlist.id}" 
+                    data-playlist-name="${playlist.playlist}" 
+                    onclick="loadPlaylist(${playlist.id}, '${imgSrc}'); toggleFocus(this);"> 
+                  <div style="display: none; width: 60%;"    
+                    data-playlist-id="${playlist.id}" 
+                    data-playlist-name="${playlist.playlist}" 
+                    onclick="loadPlaylist(${playlist.id}, '${imgSrc}'); toggleFocus(this);">
+                    <h4 style="overflow: auto; -ms-overflow-style: none; scrollbar-width: none;">${playlist.playlist}</h4>
+                    <p><span class="tracksCount" style="font-size: inherit;">${playlist.tracksCount} songs</span><span style="font-size: inherit;""> | ${playlist.created}</span></p>
+                  </div>
+                  <div class="playlist-controls" style="display: none;">
+                    <i class="fas fa-ellipsis-v"></i>
+                    <div class="control-menu">
+                      <button class="delete-playlist">Delete</button>
+                      <button class="rename-playlist">Rename</button>
+                    </div>
+                  </div>
+                </div>`);
+              }
+            }
+          }
+        });
+      };
+
+    RenderSavedPlaylist();
+
+    function displayLoginOverlay() {
+      // Create and display the overlay with a login prompt
+      const overlay = document.createElement('div');
+      overlay.classList.add('login-overlay');
+      overlay.innerHTML = `
+        <div class="overlay-content">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Spotify_logo_with_text.svg/1118px-Spotify_logo_with_text.svg.png" alt="Spotify Logo" class="spotify-logo">
+          <p>Please login to Spotify before using Moodify50</p>
+          <a href="https://accounts.spotify.com/login" target="_blank">Login to Spotify</a>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+    }
+
+    createPlaylistBtn.addEventListener('click', () => {
+      createPlaylistModal.style.display = 'block';
+    });
+
+    saveToPlaylistBtn.addEventListener('click', () => {
+      saveToPlaylistModal.style.display = 'block';
+    });
+
+    selectedOption.addEventListener('click', () => {
+      showOptions();
+    });
+
+    function showOptions() {
+
+      if (!renderState) {
+        setTimeout(showOptions, 100);
+        return;
+      };
+
+       // Show the options container
+      optionsContainer.style.display = optionsContainer.style.display === 'block' ? 'none' : 'block';
+       // Populate the available playlists dropdown menu
+       optionsContainer.innerHTML = '';
+       savedPlaylist.forEach(playlist => {
+         const option = document.createElement('div');
+         option.classList.add('option');
+         option.textContent = playlist.playlist;
+         option.dataset.playlistId = playlist.id;
+         optionsContainer.appendChild(option);
+       });
+ 
+       // Add event listener to the options
+       const options = document.querySelectorAll('#available-playlist .option');
+       options.forEach(option => {
+         option.addEventListener('click', () => {
+           selectedOption.textContent = option.textContent;
+           selectedPlaylistId = option.dataset.playlistId;
+           optionsContainer.style.display = 'none';
+         });
+       });
+    };
+
+    closeModalBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        createPlaylistModal.style.display = 'none';
+        saveToPlaylistModal.style.display = 'none';
+      });
+    });
+
+    window.addEventListener('click', (event) => {
+      if (event.target === createPlaylistModal || event.target === saveToPlaylistModal) {
+        createPlaylistModal.style.display = 'none';
+        saveToPlaylistModal.style.display = 'none';
+        // Hide the options container
+        optionsContainer.style.display = 'none';
+      } 
+    });
+
+
+    menuToggle.addEventListener('click', () => {
+      menuToggle.classList.toggle('active');
+      // Move remove, on-repeat, shuffle, queue buttons to a new div below prev, play and next buttons
+
+      additionalControls.forEach(control => control.classList.toggle('show'));
+
+      if (!document.querySelector('.mobile-buttons')) {
+        const mobileButtons = document.createElement('div');
+        mobileButtons.classList.add('mobile-buttons');
+        {% comment %} document.querySelector('.music-controls').appendChild(mobileButtons); {% endcomment %}
+        // Append it right after .music-controls not inside it
+        document.querySelector('.music-controls').insertAdjacentElement('afterend', mobileButtons);
+      }
+
+      // Move remove, on-repeat, shuffle, queue buttons to mobileButtons
+      additionalControls.forEach(control =>  document.querySelector('.mobile-buttons').appendChild(control));
+    });
+
+
+    function ShowLongAbout() {
+      $('.artist-profile .about').toggleClass('expanded'); // Toggle the "expanded" class on the .about element
+      // Change the text of the button based on the class
+      if ($('.artist-profile .about').hasClass('expanded')) {
+        $('.artist-profile .load-more').text('Show less');
+      } else {
+        $('.artist-profile .load-more').text('Load more');
+      }
+    };
+    
+    function loadTrackLyrics(trackUrl, trackName, trackArtist) {
+      currentLyricsDict = {};
+      $('.lyrics-header h3').text(`${trackName} - ${trackArtist}`);
+      $.ajax({
+        headers: { "X-CSRFToken": '{{ csrf_token }}' },
+        type: 'POST',
+        url: '{% url "server:loadLyrics" %}',
+        contentType: 'application/json',
+        data: JSON.stringify({
+          'trackId': trackUrl,
+        }),
+        success: function(response) {
+          if (response.status === 'success') {
+            currentLyricsDict = response.data.lyrics.lines;
+            $('.lyrics-body').html(currentLyricsDict.map(line => `<p>${line.words}</p>`).join(''));
+          } else {
+            $('.lyrics-body').html(`<p>You'll have to guess the lyrics for this one</p>`);
+          }
+        }
+      });
+    };
+
+    function updateMusicInfo(musicInfo) {
+      if (musicInfo) {
+        // Update Lyrics
+        loadTrackLyrics(musicInfo.trackUrl, musicInfo.title, musicInfo.artist);
+        // Update dataset
+        $(document).find('.title-container .title').data('albumId', musicInfo.albumId);
+        $(document).find('.footer-left .artist').data('artistId', musicInfo.artistId);
+
+        // Update the music-info elements with the new data
+        $(document).find('.music-info .img-cover').attr('src', musicInfo.image);
+        $(document).find('.music-info .title').text(musicInfo.title);
+        $(document).find('.music-info .album').text(musicInfo.album);
+        $(document).find('.music-info .artist').text(musicInfo.artist);
+
+        // Update title 
+        $(document).find('.title-container .title').attr('title', '(Album) ' + musicInfo.album);
+        $(document).find('.footer-left .artist').attr('title', musicInfo.artist);
+
+        // Show the music-details and hide the default message
+        $(document).find('.music-info .default-message').hide();
+        $(document).find('.music-info .img-cover').show();
+        $(document).find('.music-info .music-details').show();
+        $(document).find('.music-info .music-details-footer').show();
+
+        // Check if the title is too long, get the title of .music-details-footer
+        const spanTitle = $(document).find('.music-info .title')[0];
+        const titleContainer = document.querySelector('.title-container')
+        const musicContainer = document.querySelector('.music-details-footer');
+        // console.log(spanTitle.offsetWidth, musicContainer.offsetWidth)
+        if (spanTitle.offsetWidth >= musicContainer.offsetWidth) {
+          // If the title is too long, set the animation duration based on the title width
+          const animationDuration = spanTitle.offsetWidth / 10;
+          titleContainer.style.animation = `marquee ${animationDuration}s linear infinite`;
+        } else {
+          // If the title fits in the container, disable the animation
+          titleContainer.style.animation = 'none';
+        }
+      } else {
+        // Update Lyrics
+        $('.lyrics-header h3').text('No playing song');
+        $('.lyrics-body').empty();
+        // Show the default message and hide the music-details
+        $(document).find('.music-info .default-message').show();
+        $(document).find('.music-info .img-cover').hide();
+        $(document).find('.music-info .music-details').hide();
+        $(document).find('.music-info .music-details-footer').hide();
+      }
+    };
+    
+    function updatePlaylistInfo(albumInfo) {
+      // albumName, artists, albumType, albumReleaseDate, albumTracks, albumDuration, albumImage
+      // Update image  
+      if (albumInfo) {
+        $('#playlist-img-cover').show();
+        const playlistImgCover = document.querySelector('#playlist-img-cover');
+        const playlistInfo = document.querySelector('#playlist-info');
+        playlistImgCover.src = albumInfo.albumImage;
+        // Show the album name, artist, album_type and release date, total tracks
+        playlistInfo.innerHTML = `
+        <p style="margin-bottom: 5px;">${albumInfo.albumType.charAt(0).toUpperCase() + albumInfo.albumType.slice(1)}</p>
+        <h4>${albumInfo.albumName}</h4>
+        <p>${albumInfo.artists.map(artist => artist.name).join(', ')} • ${albumInfo.albumReleaseDate.split('-')[0]} • ${albumInfo.albumTracks} songs${albumInfo.albumDuration > 0 ? ', ' : ''}${Math.floor(albumInfo.albumDuration / 3600000).toString().padStart(2, '0').replace(/^0+/, '')} ${Math.floor(albumInfo.albumDuration / 3600000) > 0 ? 'hr' : ''} ${Math.floor((albumInfo.albumDuration % 3600000) / 60000).toString().padStart(2, '0').replace(/^0+/, '')} ${Math.floor((albumInfo.albumDuration % 3600000) / 60000) > 0 ? 'min' : ''}
+        </p>
+        `;
+      } else {
+        $('#playlist-img-cover').hide();
+        $('#playlist-info').empty();
+      }
+    };
+
+    function backToMusicPlayer() {
+      musicPlayer.classList.remove('show-search-results');
+       // Hide artistProfile if it's visible
+      $('#artistProfile').hide();
+      $('.search-bar').show();
+    };
+
+    function backToSearch() {
+      musicPlayer.classList.add('show-search-results');
+      $('#artistProfile').hide();
+      $('.search-bar').show();
+      $('.search-results').show();
+    };
+    
+    function refreshPlaylist() {
+      $('#playlist-info').empty();
+      $('#playlist-container').empty();
+      currentPlaylistId = null;
+      trackList = [];
+      isRefreshedPlaylist = true;
+      ResetProgressBar();
+
+      //Empty music player
+      updateMusicInfo(null);
+
+      //Empty playlist info
+      updatePlaylistInfo(null);
+
+      //Empty lyrics
+      $('.lyrics-header h3').text('No playing song');
+      $('.lyrics-body').empty();
+
+      newTrack.src = '';
+      newTrackUrl = null;
+
+      prevTrackIndex = currentTrackIndex;
+      currentTrackIndex = 0;
+      currentTrackDuration = null;
+      currentArtist = null;
+      currentTrack = null;
+      currentAlbum = null;
+      currentTrackImage = null;
+      currentReleaseDate = null;
+    }
+
+    function loadPlaylist(playlist, playlistImage) {
+      // console.log('Loading playlist');
+      if (queueList.length === 0) {
+        isTrackChanged = true;
+        cancelGenerate = true;
+        isRefreshedPlaylist = false;
+  
+        if (isPlaying) {
+          isPlaying = false;
+          playButton.innerHTML = '<i class="fas fa-play"></i>';
+        };  
+      };
+
+      // console log data-playlist-image
+      let data = savedPlaylist.find(item => item.id === playlist);
+
+      trackList = data.tracks;
+      if (trackList.length > 0) { 
+        if (queueList.length === 0) {
+          prevTrackIndex = currentTrackIndex;
+          currentTrackIndex = 0;
+          currentTrackDuration = trackList[0].duration + 1000;
+          currentArtist = trackList[0].artist;
+          currentTrack = trackList[0].name; 
+          currentAlbum = trackList[0].album;
+          currentTrackImage = trackList[0].image;
+          currentReleaseDate = trackList[0].published_date;
+
+          $('#notify').hide();
+
+          // When there's music-info available
+          const musicInfo = {
+            trackUrl: trackList[0].trackurl,
+            image: currentTrackImage,
+            title: currentTrack,
+            album: currentAlbum,
+            artist: currentArtist,
+            albumId: trackList[0].albumId,
+            artistId: trackList[0].artistId
+          };
+
+          updateMusicInfo(musicInfo);
+        };
+
+        newTrack.src = `https://open.spotify.com/embed/track/${trackList[0].trackurl}?utm_source=generator`;
+        newTrackUrl = trackList[0].trackurl;
+
+        $('#playlist-container').empty();
+        $('#playlist-container').append(trackList.map(song => `<div class="bar">
+          <div class="bar-cover">
+            <img src="${song.image}" alt="${song.name}">
+            <div class="bar-info">
+              <h4 class="bar-info-track" title="(Album) ${song.album}" data-album-id="${song.albumId}" onclick="loadSearchData(this, 'album');">${song.name}</h4>
+              <p class="bar-info-artist" title="${song.artist}" data-artist-id="${song.artistId}" onclick="loadSearchData(this, 'artist');">${song.artist}</p>
+              <p>
+                <span><i class="fas fa-calendar-alt"></i> ${JSON.stringify(song.published_date).length === 4 ? song.published_date : song.published_date.split('-')[0]}</span> | <span>
+                  <i class="fa-regular fa-clock-three"></i> 
+                  ${Math.floor(song.duration / 3600000) > 0 ? Math.floor(song.duration / 3600000) + ':' : ''}${Math.floor(song.duration / 3600000) > 0 ? Math.floor((song.duration % 3600000) / 60000).toString().padStart(2, '0') : Math.floor((song.duration % 3600000) / 60000)}:${Math.floor((song.duration % 60000) / 1000).toString().padStart(2, '0')}
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>`).join(''));
+        
+      } else {
+        if (queueList.length === 0) {
+          ResetProgressBar();
+          $('#notify').hide();
+          updateMusicInfo(null);
+        };
+
+        newTrack.src = '';
+        newTrackUrl = null;
+
+        $('#playlist-container').empty();
+        $('#playlist-container').append('<p>No songs found</p>');
+      };
+
+      $('#playlist-info').empty();
+
+      const albumDuration = trackList.reduce((acc, curr) => acc + curr.duration, 0);
+
+      {% if user.social_auth.all.0.provider == 'spotify' %}
+        const userName = '{{ user.first_name }} {{ user.last_name }}';
+      {% else %}
+        const userName = '{{ user.username }}';
+      {% endif %}
+
+      const albumInfo = {
+          albumName: data.playlist,
+          artists: [{"name":`${userName}`}],
+          albumType: "Playlist",
+          albumReleaseDate: data.created,
+          albumTracks: data.tracksCount,
+          albumDuration: albumDuration,
+          albumImage: playlistImage
+        };
+        updatePlaylistInfo(albumInfo);
+    };
+
+    function loadSearchData(object, type) {
+      event.stopPropagation();
+      // Load search data on click to the music player and the right side of the screen (it can be a track, artist or album)
+      cancelGenerate = true;
+      
+      if (type === 'track') { 
+        trackUrl = $(object).data('trackUrl');
+        trackName = $(object).data('trackName');
+        trackArtist = $(object).data('trackArtist');
+        trackAlbum = $(object).data('trackAlbum');
+        trackImage = $(object).data('trackImage');
+        trackReleaseDate = $(object).data('trackReleaseDate');
+        trackDuration = $(object).data('trackDuration');
+
+        if (!isPlaying) {
+          prevTrackIndex = currentTrackIndex;
+          currentTrackIndex = trackList.length;
+          currentTrackDuration = trackDuration + 1000;
+          currentArtist = trackArtist;
+          currentTrack = trackName; 
+          currentAlbum = trackAlbum;
+          currentTrackImage = trackImage;
+          currentReleaseDate = trackReleaseDate;
+
+          ResetProgressBar();
+          $('#notify').hide();
+
+          const musicInfo = {
+            trackUrl: trackUrl,
+            image: currentTrackImage,
+            title: currentTrack,
+            album: currentAlbum,
+            artist: currentArtist,
+            albumId: $(object).data('albumId'),
+            artistId: $(object).data('artistId')
+          };
+          updateMusicInfo(musicInfo);
+          
+          newTrack.src = `https://open.spotify.com/embed/track/${trackUrl}?utm_source=generator`;
+          newTrackUrl = trackUrl;
+        } else {
+          newTrack.src = ''
+          newTrackUrl = null;
+        }
+        
+        // Check if duplicate track in trackList
+        let duplicate = trackList.find(item => item.trackurl === trackUrl);
+
+        if (duplicate) {
+          trackList = trackList.filter(item => item.trackurl !== trackUrl);
+        }
+
+        trackList.push({
+          'name': trackName,
+          'artist': trackArtist,
+          'album': trackAlbum,
+          'image': trackImage,
+          'published_date': trackReleaseDate,
+          'duration': trackDuration,
+          'trackurl': trackUrl,
+          'albumId': $(object).data('albumId'),
+          'artistId': $(object).data('artistId')
+        });
+
+        // console.log(trackList);
+
+        // Load the current playlist on the right
+        $('#playlist-container').empty();
+        $('#playlist-container').append(trackList.map(song => `<div class="bar">
+          <div class="bar-cover">
+            <img src="${song.image}" alt="${song.name}">
+            <div class="bar-info">
+              <h4 class="bar-info-track" title="(Album) ${song.album}" data-album-id="${song.albumId}" onclick="loadSearchData(this, 'album');">${song.name}</h4>
+              <p class="bar-info-artist" title="${song.artist}" data-artist-id="${song.artistId}" onclick="loadSearchData(this, 'artist');">${song.artist}</p>
+              <p><span><i class="fas fa-calendar-alt"></i> ${JSON.stringify(song.published_date).length === 4 ? song.published_date : song.published_date.split('-')[0]}</span> | <span>
+                <i class="fa-regular fa-clock-three"></i> 
+                ${Math.floor(song.duration / 3600000) > 0 ? Math.floor(song.duration / 3600000) + ':' : ''}${Math.floor(song.duration / 3600000) > 0 ? Math.floor((song.duration % 3600000) / 60000).toString().padStart(2, '0') : Math.floor((song.duration % 3600000) / 60000)}:${Math.floor((song.duration % 60000) / 1000).toString().padStart(2, '0')}
+              </span></p>
+            </div>
+          </div>
+        </div>`).join(''));
+      
+      } else if (type === 'artist') {
+        // Load artist data
+
+        $.ajax({
+          headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+          },
+          type: 'POST',
+          url: '{% url "server:loadArtist" %}',
+          contentType: 'application/json',
+          data: JSON.stringify({
+            'artistId': $(object).data('artistId'),
+          }),
+          success: function(response) {
+
+            if (response.status === 'success') {
+              artistData = response.artist_items;
+              artistInfo = artistData.artistInfo;
+              artistTopTracks = artistData.artistTopTracks;
+              artistAlbums = artistData.artistAlbums;
+              artistRelatedArtists = artistData.artistRelatedArtists;
+              artistMonthlyListeners = artistData.artistMonthlyListeners;
+              artistAbout = artistData.artistAbout;
+
+              // Hide search bar, search results and show artist profile
+              $('.music-player').addClass('show-search-results');
+              $('.search-bar').hide();
+              $('.search-results').hide();
+              $('#artistProfile').show();
+
+              // Load artist profile
+              $('.artist-profile h3').text(artistInfo.name);
+
+              // update the background-image of the artist-info div
+              $('.artist-info').css('background-image', `url(${artistInfo.images[0].url})`);
+              $('.artist-profile p').text(artistMonthlyListeners.toLocaleString() + ' monthly listeners');
+              $('.artist-info h3, .artist-info p').addClass('glow');
+
+              // Load top tracks
+              $('.top-tracks').empty();
+              $('.top-tracks').append(artistTopTracks.tracks.map(track => 
+              `<div class="artist-result" 
+              data-track-url="${track.external_urls.spotify.split('/').pop()}"
+              data-track-name="${track.name}" 
+              data-track-artist="${track.artists[0].name}"
+              data-track-album="${track.album.name}" 
+              data-track-image="${track.album.images[0].url}"
+              data-track-release-date="${track.album.release_date}" 
+              data-track-duration="${track.duration_ms}" 
+              data-album-id="${track.album.id}" 
+              data-artist-id="${track.artists[0].id}"
+              onclick="loadSearchData(this, 'track');">
+              <img src="${track.album.images[0].url}" alt="${track.name}">
+              <div class="artist-result-info">
+                  <p style="font-size: 16px;">${track.name}</p>
+                  <p>${Math.floor(track.duration_ms / 3600000) > 0 ? Math.floor(track.duration_ms / 3600000) + ':' : ''}${Math.floor(track.duration_ms / 3600000) > 0 ? Math.floor((track.duration_ms % 3600000) / 60000).toString().padStart(2, '0') : Math.floor((track.duration_ms % 3600000) / 60000)}:${Math.floor((track.duration_ms % 60000) / 1000).toString().padStart(2, '0')}</p>
+              </div>
+              </div>`
+              
+              ));
+
+              // Load albums
+              $('.albums2').empty();
+              $('.albums2').append(artistAlbums.items.filter(album => album.album_group !== 'appears_on').map(album => 
+                `<div class="album-result" data-album-id="${album.id}" onclick="loadSearchData(this, 'album');">
+                  <img src="${album.images[0].url}" alt="${album.name}">
+                  <div class="album-result-info">
+                    <h4>${album.name}</h4>
+                    <p>${album.release_date.split('-')[0]} • ${album.album_type}</p>
+                  </div>
+                </div>`
+              ));
+
+              // Load related artists
+              $('.related-artists').empty();
+              $('.related-artists').append(artistRelatedArtists.artists.map(artist => 
+              `<div class="related-artist-result" data-artist-id="${artist.id}" onclick="loadSearchData(this, 'artist');">
+              <img src="${artist.images[0].url}" alt="${artist.name}">
+              <div class="related-artist-info">
+                <h4>${artist.name}</h4>
+                <p>${artist.type.charAt(0).toUpperCase() + artist.type.slice(1)}</p>
+              </div>
+              </div>`
+              ));
+
+              // Load appears on
+              $('.appears-on').empty();
+              $('.appears-on').append(artistAlbums.items.filter(album => album.album_group === 'appears_on').map(album => 
+              `<div class="artist-appears-on-result" data-album-id="${album.id}" onclick="loadSearchData(this, 'album');">
+              <img src="${album.images[0].url}" alt="${album.name}">
+              <div class="artist-appears-on-info">
+                <h4>${album.name}</h4>
+                <p>${album.release_date.split('-')[0]} • ${album.album_type}</p>
+              </div>
+              </div>`
+              ));
+
+              // Load About artist
+
+              // console.log(artistAbout);
+
+              $('.artist-about .brief').text(artistInfo.name + ' is a ' + artistInfo.genres[0] + ' artist with ' + artistInfo.followers.total.toLocaleString() + ' followers on Spotify.');
+
+              $('.artist-about .monthlyListeners').text(artistMonthlyListeners.toLocaleString() + ' monthly listeners');
+              $('.artist-about .about .about-text').html(artistAbout);
+              $('.artist-about .about .about-text a').each(function() {
+                // check if track, album or artist
+                if ($(this).attr('href').includes('track')) {
+                  const trackId = $(this).attr('href').split('/').pop();
+                  $(this).attr('data-track-url', trackId); // Add the track ID as a data attribute
+                  // Add other datas by using ajax request loadTrack 
+                  $.ajax({
+                    headers: {
+                      'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    type: 'POST',
+                    url: '{% url "server:loadTrack" %}',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                      'trackId': trackId,
+                    }),
+                    success: function(response) {
+                      if (response.status === 'success') {
+                        const trackData = response.track_items;
+                        $('a[data-track-url="' + trackId + '"]').attr('data-track-name', trackData.name);
+                        $('a[data-track-url="' + trackId + '"]').attr('data-track-artist', trackData.artists[0].name);
+                        $('a[data-track-url="' + trackId + '"]').attr('data-track-album', trackData.album.name);
+                        $('a[data-track-url="' + trackId + '"]').attr('data-track-image', trackData.album.images[0].url);
+                        $('a[data-track-url="' + trackId + '"]').attr('data-track-release-date', trackData.album.release_date);
+                        $('a[data-track-url="' + trackId + '"]').attr('data-track-duration', trackData.duration_ms);
+                        $('a[data-track-url="' + trackId + '"]').attr('data-album-id', trackData.album.id);
+                        $('a[data-track-url="' + trackId + '"]').attr('data-artist-id', trackData.artists[0].id);
+                      } else {
+                        console.log('Failed to load track data');
+                      }
+                    }
+                  });
+                  
+                  $(this).removeAttr('href'); // Remove the href attribute
+                  $(this).on('click', function() {
+                    loadSearchData(this, 'track'); // Call the loadSearchData function with the track ID
+                  });
+                  // add style cursor pointer
+                  $(this).css('cursor', 'pointer');
+                } else if ($(this).attr('href').includes('album')) {
+                  const albumId = $(this).attr('href').split('/').pop();
+                  $(this).attr('data-album-id', albumId); // Add the album ID as a data attribute
+                  $(this).removeAttr('href'); // Remove the href attribute
+                  $(this).on('click', function() {
+                    loadSearchData(this, 'album'); // Call the loadSearchData function with the album ID
+                  });
+                  // add style cursor pointer
+                  $(this).css('cursor', 'pointer');
+                } else if ($(this).attr('href').includes('artist')) {
+                  const artistId = $(this).attr('href').split('/').pop();
+                  $(this).attr('data-artist-id', artistId); // Add the artist ID as a data attribute
+                  $(this).removeAttr('href'); // Remove the href attribute
+                  $(this).on('click', function() {
+                    loadSearchData(this, 'artist'); // Call the loadSearchData function with the artist ID
+                  });
+                  // add style cursor pointer
+                  $(this).css('cursor', 'pointer');
+                }
+              });
+
+              if ($('.load-more').text() === 'Show less') {
+                $('.load-more').text('Load more');
+                $('.artist-profile .about').removeClass('expanded');
+              }
+
+              if ($('.artist-profile .about .about-text').height() > 200) {
+                $('.load-more').show();
+              } else {
+                $('.load-more').hide();
+              }
+
+            } else {
+              console.log('Failed to load artist data');
+            }
+          }
+        });
+      } else if (type === 'album') {
+        // Load album data
+        // console.log('Album data');
+        
+        $.ajax({
+          headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+          },
+          type: 'POST',
+          url: '{% url "server:loadAlbum" %}',
+          contentType: 'application/json',
+          data: JSON.stringify({
+            'albumId': $(object).data('albumId'),
+          }),
+          success: function(response) {
+
+            if (response.status === 'success') {
+              if (queueList.length === 0) {
+                isTrackChanged = true;
+                cancelGenerate = true;
+                isRefreshedPlaylist = false;
+  
+                if (isPlaying) {
+                  isPlaying = false;
+                  playButton.innerHTML = '<i class="fas fa-play"></i>';
+                };    
+              };
+
+              // console.log(response.album_items);
+              albumData = response.album_items;
+  
+              albumType = albumData.album_type;
+              artists = albumData.artists; //This is an array of artists
+              albumName = albumData.name;
+              albumImage = albumData.images[0].url;
+              albumReleaseDate = albumData.release_date;
+              albumTracks = albumData.total_tracks;
+     
+              trackList = albumData.tracks.items.map(track => {
+                return {
+                  'name': track.name,
+                  'artist': track.artists[0].name,
+                  'album': albumName,
+                  'image': albumImage,
+                  'published_date': albumReleaseDate,
+                  'duration': track.duration_ms,
+                  'trackurl': track.external_urls.spotify.split('/').pop(),
+                  'artistId': track.artists[0].id,
+                  'albumId': albumData.id,
+                };
+              });
+
+              if (trackList.length > 0) {
+                if (queueList.length === 0) {
+                  prevTrackIndex = currentTrackIndex;
+                  currentTrackIndex = 0;
+                  currentTrackDuration = trackList[0].duration + 1000;
+                  currentArtist = trackList[0].artist;
+                  currentTrack = trackList[0].name; 
+                  currentAlbum = trackList[0].album;
+                  currentTrackImage = trackList[0].image;
+                  currentReleaseDate = trackList[0].published_date;
+
+                  ResetProgressBar();
+                  $('#notify').hide();
+                  const musicInfo = {
+                    trackUrl: trackList[0].trackurl,
+                    image: currentTrackImage,
+                    title: currentTrack,
+                    album: currentAlbum,
+                    artist: currentArtist,
+                    albumId: trackList[0].albumId,
+                    artistId: trackList[0].artistId
+                  };
+                  updateMusicInfo(musicInfo);
+                };
+              };
+
+              newTrack.src = `https://open.spotify.com/embed/track/${trackList[0].trackurl}?utm_source=generator`;
+              newTrackUrl = trackList[0].trackurl;
+
+              // Load the current playlist on the right
+              $('#playlist-info').empty();
+
+              const albumDuration =  albumData.tracks.items.reduce((acc, track) => acc + track.duration_ms, 0);
+              const albumInfo = {
+                albumName: albumName,
+                artists: artists,
+                albumType: albumType,
+                albumReleaseDate: albumReleaseDate,
+                albumTracks: albumTracks,
+                albumDuration: albumDuration,
+                albumImage: albumImage
+              };
+              updatePlaylistInfo(albumInfo);
+
+              $('#playlist-container').empty();
+
+              $('#playlist-container').append(trackList.map(song => `<div class="bar">
+                <div class="bar-cover">
+                  <img src="${song.image}" alt="${song.name}">
+                  <div class="bar-info">
+                    <h4 class="bar-info-track" title="(Album) ${song.album}" data-album-id="${song.albumId}" onclick="loadSearchData(this, 'album');">${song.name}</h4>
+                    <p class="bar-info-artist" title="${song.artist}" data-artist-id="${song.artistId}" onclick="loadSearchData(this, 'artist');">${song.artist}</p>
+                    <p><span><i class="fas fa-calendar-alt"></i> ${JSON.stringify(song.published_date).length === 4 ? song.published_date : song.published_date.split('-')[0]}</span> | <span>
+                      <i class="fa-regular fa-clock-three"></i> 
+                      ${Math.floor(song.duration / 3600000) > 0 ? Math.floor(song.duration / 3600000) + ':' : ''}${Math.floor(song.duration / 3600000) > 0 ? Math.floor((song.duration % 3600000) / 60000).toString().padStart(2, '0') : Math.floor((song.duration % 3600000) / 60000)}:${Math.floor((song.duration % 60000) / 1000).toString().padStart(2, '0')}
+                    </span></p>
+                  </div>
+                </div>
+              </div>`).join(''));
+            } else {
+              console.log('Failed to load album data');
+            }
+          }
+        });
+      }
+    }
+
+    function toggleFocus(playlist) {
+      currentPlaylistId = playlist.dataset.playlistId;
+      const playlists = document.querySelectorAll('.playlist-box');
+      playlists.forEach(pl => pl.classList.remove('focused'));
+      playlist.parentElement.classList.add('focused');
+    };
+
+    function updateQueueListDisplay() {
+      // Update the queue list when a new track is added
+      const nowPlaying = document.getElementById('now-playing');
+      const playingNext = document.getElementById('playing-next');
+
+      if (queueList.length > 0) {
+        if (currentTrackIndex !== 0) {
+          queueList.unshift(trackList[currentTrackIndex]);
+          currentTrackIndex = 0;
+        };
+        nowPlaying.innerHTML = `<li><span style="font-weight: bold; color: #1ed760; white-space: wrap;">${queueList[0].name}</span><span style="color: #b3b3b3; white-space: wrap;"> - ${queueList[0].artist}</span></li>`;
+      } else {
+        nowPlaying.innerHTML = '<li>Queue is empty</li>';
+      };
+      
+      playingNext.innerHTML = '';
+
+      if (queueList.length > 1) {
+        for (let i = 1; i < queueList.length; i++) {
+          playingNext.innerHTML += `<li><span style="color: #ffffff; white-space: wrap;">${queueList[i].name}</span><span style="color: #b3b3b3; white-space: wrap;"> - ${queueList[i].artist}</span></li>`;
+        }
+      } else {
+        playingNext.innerHTML = '<li>No songs in queue</li>';
+      };
+    };
+
+
+    $(document).ready(function() {
+
+      $(document).on('click', '.playlist-controls .fa-ellipsis-v', function(event) {
+        event.stopPropagation(); // Prevent the click event from bubbling up to the .playlist-box
+        const controlMenu = $(this).siblings('.control-menu');
+        $('.control-menu').not(controlMenu).hide(); // Hide other control menus
+        controlMenu.toggle();
+      });
+      
+      // Close the control menu when clicking outside
+      $(document).on('click', function(event) {
+        if (!$(event.target).closest('.playlist-controls').length) {
+          $('.control-menu').hide();
+        }
+      });
+
+      function deletePlaylist(playlistId) {
+        $.ajax({
+          type: 'POST',
+          url: '{% url "server:deletePlaylist" %}',
+          data: {
+            'playlistId': playlistId,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+          },
+          success: function(response) {
+            if (response.status === 'success') {
+              RenderSavedPlaylist();
+              if (parseInt(currentPlaylistId) === playlistId) {
+                refreshPlaylist();
+              }
+            } else {
+              console.log('Failed to delete the playlist');
+            }
+          }
+        });
+      };
+      
+      function renamePlaylist(playlistId) {
+        event.stopPropagation();
+        const newPlaylistName = prompt('Enter the new playlist name');
+        if (newPlaylistName) {
+          $.ajax({
+            type: 'POST',
+            url: '{% url "server:renamePlaylist" %}',
+            data: {
+              'playlistId': playlistId,
+              'newPlaylistName': newPlaylistName,
+              'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function(response) {
+              if (response.status === 'success') {
+                RenderSavedPlaylist();
+                if (parseInt(currentPlaylistId) === playlistId) {
+                  $('#playlist-info h4').text(newPlaylistName);
+                }
+              } else {
+                console.log('Failed to rename the playlist');
+              }
+            }
+          });
+        }
+      };
+
+      $(document).on('click', '.delete-playlist', function(event) {
+        event.stopPropagation(); // Prevent the click event from bubbling up to the .playlist-box
+        const playlistId = $(this).closest('.playlist-box').data('playlistId');
+        const playlistName = $(this).closest('.playlist-box').data('playlistName');
+        const confirmDelete = confirm(`Are you sure you want to delete the playlist "${playlistName}"?`);
+
+        if (confirmDelete) {
+          deletePlaylist(playlistId);
+        }
+      });
+      
+      $(document).on('click', '.rename-playlist', function(event) {
+        event.stopPropagation(); // Prevent the click event from bubbling up to the .playlist-box
+        const playlistId = $(this).closest('.playlist-box').data('playlistId');
+        renamePlaylist(playlistId);
+      });
+
+      $(document).on('submit', '#searchItems', function(event) {
+        event.preventDefault();
+        const query = $('#searchInput').val()
+        if (query === '') {
+          return;
+        }
+        $.ajax({
+          headers: { "X-CSRFToken": '{{ csrf_token }}' },
+          type: 'POST',
+          url: '{% url "server:search" %}',
+          contentType: 'application/json',
+          data: JSON.stringify({
+            'query': query,
+            'search_type': 'track,album,artist',
+            'market': null,
+          }),
+          success: function(response) {
+            if (response.status === 'success') {
+              // Populate Top Result
+              const topResultContainer = document.querySelector('.top-result');
+              topResultContainer.innerHTML = '';
+              if (response.search_results.tracks && response.search_results.tracks.items.length > 0) {
+                const topResult = response.search_results.tracks.items[0];
+                try {
+                  if (topResult.album.images[0].url) {
+                    topResultContainer.innerHTML += `
+                      <h4>Top Result</h4>
+                      <div class="search-result" 
+                      data-track-url="${topResult.id}" 
+                      data-track-name="${topResult.name}" 
+                      data-track-artist="${topResult.artists[0].name}" 
+                      data-track-album="${topResult.album.name}"
+                      data-track-duration="${topResult.duration_ms}"
+                      data-track-image="${topResult.album.images[0].url}"
+                      data-track-release-date="${topResult.album.release_date}"
+                      data-album-id="${topResult.album.id}"
+                      data-artist-id="${topResult.artists[0].id}"
+                      onclick="loadSearchData(this, 'track');">
+                        <img src="${topResult.album.images[0].url}" alt="${topResult.name}">
+                        <div class="search-result-info">
+                          <h4 class="bar-info-track" title="(Album) ${topResult.album.name}" data-album-id="${topResult.album.id}" onclick="loadSearchData(this, 'album');">${topResult.name}</h4>
+                          <p class="bar-info-artist" title="${topResult.artists[0].name}" data-artist-id="${topResult.artists[0].id}" onclick="loadSearchData(this, 'artist');">${topResult.artists[0].name}</p>
+                        </div>
+                      </div>
+                    `;
+                  }
+                } catch (error) {
+                  console.log('No image found');
+                }  
+              }
+
+              // Populate Related Songs
+              const relatedSongsContainer = document.querySelector('.related-songs-list');
+              relatedSongsContainer.innerHTML = '';
+              if (response.search_results.tracks && response.search_results.tracks.items.length > 1) {
+                for (let i = 1; i < response.search_results.tracks.items.length; i++) {
+                  const track = response.search_results.tracks.items[i];
+                  try {
+                    if (track.album.images[0].url) {
+                      relatedSongsContainer.innerHTML += `
+                        <div class="search-result" 
+                        data-track-url="${track.id}" 
+                        data-track-name="${track.name}" 
+                        data-track-artist="${track.artists[0].name}" 
+                        data-track-album="${track.album.name}"
+                        data-track-duration="${track.duration_ms}"
+                        data-track-image="${track.album.images[0].url}"
+                        data-track-release-date="${track.album.release_date}"
+                        data-album-id="${track.album.id}"
+                        data-artist-id="${track.artists[0].id}"
+                        onclick="loadSearchData(this, 'track');">
+                          <img src="${track.album.images[0].url}" alt="${track.name}">
+                          <div class="search-result-info">
+                            <h4 class="bar-info-track" title="(Album) ${track.album.name}" data-album-id="${track.album.id}" onclick="loadSearchData(this, 'album');">${track.name}</h4>
+                            <p class="bar-info-artist" title="${track.artists[0].name}" data-artist-id="${track.artists[0].id}" onclick="loadSearchData(this, 'artist');">${track.artists[0].name}</p>
+                          </div>
+                        </div>
+                      `;
+                    }
+                  } catch (error) {
+                    console.log('No image found');
+                  }
+                }
+              }
+        
+              // Clear Artists and Albums containers
+              const artistsContainer = document.querySelector('.artists');
+              artistsContainer.innerHTML = '';
+              if (response.search_results.artists && response.search_results.artists.items.length > 0) {
+                for (let i = 0; i < response.search_results.artists.items.length; i++) {
+                  const artist = response.search_results.artists.items[i];
+                  try {
+                    if (artist.images[0].url) {
+                      artistsContainer.innerHTML += `
+                        <div class="search-result" data-artist-id="${artist.id}" onclick="loadSearchData(this, 'artist');">
+                          <img src="${artist.images[0].url}" alt="${artist.name}">
+                          <div class="search-result-info">
+                            <h4>${artist.name}</h4>
+                            <p>Artist</p>
+                          </div>
+                        </div>
+                      `;
+                    }
+                  } catch (error) {
+                    console.log('No image found');
+                  }
+                }
+              }
+              
+              const albumsContainer = document.querySelector('.albums');
+              albumsContainer.innerHTML = '';
+              if (response.search_results.albums && response.search_results.albums.items.length > 0) {
+                for (let i = 0; i < response.search_results.albums.items.length; i++) {
+                  const album = response.search_results.albums.items[i];
+                  try {
+                    if (album.images[0].url) {
+                      albumsContainer.innerHTML += `
+                        <div class="search-result" data-album-id="${album.id}" onclick="loadSearchData(this, 'album');">
+                          <img src="${album.images[0].url}" alt="${album.name}">
+                          <div class="search-result-info">
+                            <h4>${album.name}</h4>
+                            <p>Album</p>
+                          </div>
+                        </div>
+                      `;
+                    }
+                  } catch (error) {
+                    console.log('No image found');
+                  }            
+                }
+              }
+            
+              musicPlayer.classList.add('show-search-results');
+              $('.search-results').show();
+            } else {
+              console.log('Failed to load search results');
+            }
+          }
+        });
+      });
+ 
+      $(document).on('submit','#generator', function(event){
+          event.preventDefault();
+          console.log('Generating playlist');
+          cancelGenerate = false;
+          $('#generate-btn').prop('disabled', true);
+          // disable play, previous and next buttons
+          $('.play').prop('disabled', true);
+          $('.prevS').prop('disabled', true);
+          $('.nextS').prop('disabled', true);
+
+          $('#playlist-container').empty();
+          $('#notify').show();
+          $.ajax({
+              type:'POST',
+              url:'{% url "server:generate" %}',
+              data:
+              {
+                  mood: $('#mood').val(),
+                  type: $('#type').val(),
+                  csrfmiddlewaretoken: '{{ csrf_token }}'
+              },
+              success:function(event){
+                $('#notify').hide();
+                ResetProgressBar();
+
+                if (cancelGenerate) {
+                  $('#generate-btn').prop('disabled', false);
+                  return;
+                }
+
+                trackList = event.songsURL;
+
+                if (trackList.length === 0) {
+                  if ($('#playlist-container').find('p').length === 0) {
+                    $('#playlist-container').append('<p>No songs found</p>');
+                  };
+                } else { 
+                  if (queueList.length === 0) {
+                    prevTrackIndex = currentTrackIndex;
+                    currentTrackIndex = 0;
+                    currentTrackDuration = trackList[0].duration + 1000;
+                    currentArtist = trackList[0].artist;
+                    currentTrack = trackList[0].name;
+                    currentAlbum = trackList[0].album;
+                    currentTrackImage = trackList[0].image;
+                    currentReleaseDate = trackList[0].published_date;
+                    
+                    const musicInfo = {
+                      trackUrl: trackList[0].trackurl,
+                      image: currentTrackImage,
+                      title: currentTrack,
+                      album: currentAlbum,
+                      artist: currentArtist,
+                      albumId: trackList[0].albumId,
+                      artistId: trackList[0].artistId
+                    };
+                    updateMusicInfo(musicInfo);
+                  };
+
+                  newTrack.src = `https://open.spotify.com/embed/track/${trackList[0].trackurl}?utm_source=generator`;
+                  newTrackUrl = trackList[0].trackurl; 
+
+                  $('#playlist-container').append(trackList.map(song => `<div class="bar">
+                    <div class="bar-cover">
+                      <img src="${song.image}" alt="${song.name}">
+                      <div class="bar-info">
+                        <h4 class="bar-info-track" title="(Album) ${song.album}" data-album-id="${song.albumId}" onclick="loadSearchData(this, 'album');">${song.name}</h4>
+                        <p class="bar-info-artist" title="${song.artist}" data-artist-id="${song.artistId}" onclick="loadSearchData(this, 'artist');">${song.artist}</p>
+                        <p><span><i class="fas fa-calendar-alt"></i> ${JSON.stringify(song.published_date).length === 4 ? song.published_date : song.published_date.split('-')[0]}</span> | <span>
+                          <i class="fa-regular fa-clock-three"></i> 
+                          ${Math.floor(song.duration / 3600000) > 0 ? Math.floor(song.duration / 3600000) + ':' : ''}${Math.floor(song.duration / 3600000) > 0 ? Math.floor((song.duration % 3600000) / 60000).toString().padStart(2, '0') : Math.floor((song.duration % 3600000) / 60000)}:${Math.floor((song.duration % 60000) / 1000).toString().padStart(2, '0')}
+                        </span></p>
+                      </div>
+                    </div>
+                  </div>`).join(''));
+                };
+                // Enable the button after the request is completed
+                $('#generate-btn').prop('disabled', false);
+                
+                // Enable play, previous and next buttons
+                $('.play').prop('disabled', false);
+                $('.prevS').prop('disabled', false);
+                $('.nextS').prop('disabled', false);
+              } 
+            })
+        });
+
+
+        $(document).on('submit', '#createPlaylistModalForm', function(event) {
+          event.preventDefault();
+          const playlistName = $('#playlistName').val();
+
+          if (playlistName === '') {
+            return;
+          }
+
+          $.ajax({
+            headers: { "X-CSRFToken": '{{ csrf_token }}' },
+            type: 'POST',
+            url: '{% url "server:createPlaylist" %}',
+            contentType: 'application/json',
+            data: JSON.stringify({
+              'playlistName': playlistName,
+            }),
+            success: function(response) {
+              if (response.status === 'success') {
+                console.log('Playlist created successfully');
+                RenderSavedPlaylist();
+              } else {
+                console.log('Failed to create playlist');
+              };
+              // Close the modal
+              createPlaylistModal.style.display = 'none';
+            }
+          });
+        });
+
+      $(document).on('submit', '#saveToPlaylistModalForm', function(event) {
+        event.preventDefault();
+
+        if (trackList.length === 0) {
+          return;
+        }
+
+        const data = trackList.map(track => {
+          return {
+            'trackurl': track.trackurl,
+            'artist': track.artist,
+            'name': track.name,
+            'album': track.album,
+            'duration': track.duration,
+            'image': track.image,
+            'published_date': track.published_date,
+            'artistId': track.artistId,
+            'albumId': track.albumId,
+          };
+        });
+
+        $.ajax({
+          headers: { "X-CSRFToken": '{{ csrf_token }}' },
+          type: 'POST',
+          url: '{% url "server:saveToPlaylist" %}',
+          contentType:"application/json",
+          data: JSON.stringify({
+            'playlistId': selectedPlaylistId,
+            'tracks': data,
+          }),
+          success: function(response) {
+            if (response.status == 'success') {
+              console.log('Playlist saved successfully');
+              RenderSavedPlaylist();
+            } else {
+              console.log('Failed to save playlist');
+            }
+            saveToPlaylistModal.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    function ResetProgressBar() {
+      progress.style.width = '0%';
+      currentTimeDisplay.textContent = '0:00';
+      durationDisplay.textContent = '0:00';
+      progressDot.style.display = 'none';
+      progressDot.style.left = '-5px';
+    };
+
+    progressBar.addEventListener('mouseover', () => {
+      progressDot.style.display = 'block';
+    });
+    
+    progressBar.addEventListener('mouseleave', () => {
+      setTimeout(() => {
+        if (progressDot.style.display === 'block' && !progressBar.matches(':hover') && !progressDot.matches(':active')) {
+          progressDot.style.display = 'none';
+        }
+      }, 3000);
+    });
+    
+    ResetProgressBar();
+
+    try {
+      console.log('Loading Spotify IFrame API');
+      window.onSpotifyIframeApiReady = (IFrameAPI) => {
+            console.log('Spotify IFrame API is ready');
+            let element = document.getElementById('embed-iframe');
+            let options = {
+              uri: '',
+              width:'0',
+              height:'0',
+            };
+            let callback = async (EmbedController) => {
+
+              EmbedController.addListener('ready', () => {
+                console.log('The Embed has initialized');
+                EmbedController.addListener('playback_update', e => {
+                  if (e.data.duration === 29754) {
+                    EmbedController.pause()
+                    displayLoginOverlay();
+                    isPlaying = false;
+                    playButton.innerHTML = '<i class="fas fa-play"></i>';
+                    return;
+                  }
+                  if (isPlaying && e.data.position !== newPosition) {
+                    newPosition = e.data.position;
+                  }
+                });
+              });
+
+              function updateProgressBar() {
+
+                progressInterval = setInterval(() => {
+
+                if (isRefreshedPlaylist) {
+                  pauseTime = newPosition;
+                  isRefreshedPlaylist = false;
+                  clearTimeout(loadingTrack);
+                  EmbedController.pause();
+                  if (isPlaying) {
+                    isPlaying = false;
+                    playButton.innerHTML = '<i class="fas fa-play"></i>';
+                  };
+                  return;
+                }
+              
+                if (isTrackChanged) {
+                  pauseTime = newPosition;
+                  isTrackChanged = false;
+                  EmbedController.pause();
+                  clearTimeout(timeOut);
+                  ResetProgressBar();
+                  return;
+                }  
+
+                totalDuration = currentTrackDuration - 1000;
+                if (isPlaying && pauseTime !== newPosition) {
+                  const currentTime = newPosition;
+                  const progressPercentage = (currentTime / totalDuration) * 100;
+
+                  const hours = Math.floor(currentTime / 3600000);
+                  const minutes = Math.floor((currentTime % 3600000) / 60000);
+                  const seconds = Math.floor((currentTime % 60000) / 1000);
+
+                  const durationHours = Math.floor(totalDuration / 3600000);
+                  const durationMinutes = Math.floor((totalDuration % 3600000) / 60000);
+                  const durationSeconds = Math.floor((totalDuration % 60000) / 1000);
+              
+                  // Check if currentTime is greater than or equal to totalDuration
+                  if (progress.style.width === '100%' || currentTime >= (totalDuration - 500)) {
+                    progress.style.width = '0%';
+                    ResetProgressBar();
+                    clearTimeout(timeOut);
+
+                    if (!isOnRepeat) {
+
+                      timeOut = setTimeout(() => {
+                        if (!isPlaying) {
+                          return;
+                        };
+
+                        if (queueList.length > 0) {
+                          queueList.splice(0, 1)
+                        } else {
+                          currentTrackIndex = (currentTrackIndex + 1) % trackList.length;
+                        };
+                        
+                        loadTrack(currentTrackIndex);
+                        updateQueueListDisplay();
+
+                      }, 1000);
+                    } else {
+                      setTimeout(() => {
+                        if (!isPlaying) {
+                          return;
+                        };
+                        loadTrack(currentTrackIndex);
+                      }, 2000);
+                    }
+                    
+                    return; // Exit the function to prevent further updates
+                  }
+                  
+                  progress.style.width = `${progressPercentage}%`;
+                  currentTimeDisplay.textContent = `${hours > 0 ? hours + ':' : ''}${hours > 0 ? minutes.toString().padStart(2, '0') : minutes}:${seconds.toString().padStart(2, '0')}`;
+                  durationDisplay.textContent = `${durationHours > 0 ? durationHours + ':' : ''}${durationHours > 0 ? durationMinutes.toString().padStart(2, '0') : durationMinutes}:${durationSeconds.toString().padStart(2, '0')}`;
+              
+                  // Update the progress dot position
+                  updateProgressDotPosition(progressPercentage);
+                  // Update the lyrics display
+                  if (currentLyricsDict.length > 0) {
+                    updateLyricsDisplay(currentTime);
+                  };
+                }
+              
+                }, 100);
+              }
+              
+              // Function to update the progress dot position based on the current progress
+              function updateProgressDotPosition(progressPercentage) {
+                const progressBarWidth = progressBar.offsetWidth;
+                const dotPosition = (progressPercentage / 100) * progressBarWidth;
+                progressDot.style.left = `${dotPosition-5}px`;
+              }
+
+              // Function to update the lyrics display
+              function updateLyricsDisplay(currentTime) {
+                $('.lyrics-body').html(currentLyricsDict.map((line, index) => {
+                  return `<p style="color: ${currentTime >= currentLyricsDict[index].startTimeMs && currentTime < currentLyricsDict[index + 1].startTimeMs ? '#1ed760' : '#ffffff'}; font-weight: ${currentTime >= currentLyricsDict[index].startTimeMs && currentTime < currentLyricsDict[index + 1].startTimeMs ? 'bold' : 'normal'};">${line.words}</p>`;
+                }).join(''));
+              }
+
+              // Add event listener for progress bar click
+              progressBar.addEventListener('click', (event) => {
+                if (currentTrackDuration !== null) {
+
+                  const rect = progressBar.getBoundingClientRect();
+                  const offsetX = event.clientX - rect.left;
+                  const progressPercentage = (offsetX / rect.width) * 100;
+                  const seekTime = (progressPercentage / 100) * totalDuration;
+              
+                  EmbedController.seek(Math.floor(seekTime / 1000));
+
+                }
+              });
+
+              // Event listener for progress bar mouse down
+              progressBar.addEventListener('mousedown', (e) => {
+                if (e.target === progressDot) {
+                  const rect = progressBar.getBoundingClientRect();
+                  const offsetX = e.clientX - rect.left;
+                  const progressPercentage = (offsetX / rect.width) * 100;
+                  const seekTime = (progressPercentage / 100) * totalDuration;
+
+                  EmbedController.seek(Math.floor(seekTime / 1000));
+
+                  updateProgressDotPosition();
+                }
+              });
+
+              // Event listener for progress dot mouse down
+              progressDot.addEventListener('mousedown', () => {
+                window.addEventListener('mousemove', handleProgressDotDrag);
+                window.addEventListener('mouseup', handleProgressDotDragEnd);
+              });
+
+              // Function to handle progress dot drag
+              function handleProgressDotDrag(e) {
+                const rect = progressBar.getBoundingClientRect();
+                const offsetX = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+                const progressPercentage = (offsetX / rect.width) * 100;
+                const seekTime = (progressPercentage / 100) * totalDuration;
+
+                EmbedController.seek(Math.floor(seekTime / 1000));
+                
+                updateProgressDotPosition();
+              }
+
+              // Function to handle progress dot drag end
+              function handleProgressDotDragEnd() {
+                window.removeEventListener('mousemove', handleProgressDotDrag);
+                window.removeEventListener('mouseup', handleProgressDotDragEnd);
+              }
+
+
+              // <--------------- Music player controls ------------------>
+
+
+              // Lyrics button
+              lyricsButton.addEventListener('click', () => {
+                lyricsClicked = !lyricsClicked;
+                const lyricsContainer = document.querySelector('.lyrics-container');
+                if (lyricsClicked) {
+                  if (queueClicked) {
+                    queueClicked = false;
+                    document.querySelector('.queue-menu').style.display = 'none';
+                    queueButton.style.color = '#ffffff';
+                  }
+                  lyricsContainer.style.display = 'block';
+                  lyricsButton.style.color = '#1ed760';
+                } else {
+                  lyricsContainer.style.display = 'none';
+                  lyricsButton.style.color = '#ffffff';
+                }
+              });
+
+              queueButton.addEventListener('click', () => {
+                queueClicked = !queueClicked;
+                const queueMenu = document.querySelector('.queue-menu');
+                if (queueClicked) {
+                  if (lyricsClicked) {
+                    lyricsClicked = false;
+                    document.querySelector('.lyrics-container').style.display = 'none';
+                    lyricsButton.style.color = '#ffffff';
+                  }
+                  queueMenu.style.display = 'block';
+                  queueButton.style.color = '#1ed760';
+                  updateQueueListDisplay();
+                } else {
+                  queueMenu.style.display = 'none';
+                  queueButton.style.color = '#ffffff';
+                }
+          
+              });
+
+              // Clear queue button
+              document.querySelector('.clear-queue').addEventListener('click', () => {
+                queueList = [];
+
+                isTrackChanged = true;
+                cancelGenerate = true;
+                isRefreshedPlaylist = false;
+                
+                if (isPlaying) {
+                  isPlaying = false;
+                  playButton.innerHTML = '<i class="fas fa-play"></i>';
+                }
+                updateQueueListDisplay();
+              });
+
+              // Save queue button (Add the current playlist to queue)
+              document.querySelector('.add-playlist').addEventListener('click', () => {
+                if (trackList.length === 0) {
+                  return;
+                };
+                for (let i = 0; i < trackList.length; i++) {
+                  queueList.push(trackList[i]);
+                }
+                updateQueueListDisplay();
+              });      
+            
+              // Save track button (Add the current track to queue)
+              document.querySelector('.add-track').addEventListener('click', () => {
+                if (trackList.length === 0) {
+                  return;
+                };
+                queueList.push(trackList[currentTrackIndex]);
+                updateQueueListDisplay();
+              });
+
+              //Close the queue UI
+              document.querySelector('.close-queue').addEventListener('click', () => {
+                queueClicked = false;
+                document.querySelector('.queue-menu').style.display = 'none';
+              });
+            
+              generateButton.addEventListener('click', () => {
+                if (isPlaying && queueList.length === 0) {
+                  isPlaying = false;
+                  playButton.innerHTML = '<i class="fas fa-play"></i>';
+                  EmbedController.pause();
+                  clearTimeout(timeOut);
+                  clearInterval(progressInterval);
+                }
+              });
+
+              removeButton.addEventListener('click', () => {
+                  if (trackList.length === 0 && queueList.length === 0) {
+                    return;
+                  };
+
+                  const confirmRemove = confirm(`Are you sure you want to remove this track from ${queueList.length > 0 ? 'Queue' : 'Current Playlist'}?`);
+
+                  // Check if the current track is in the selected saved playlist then send request to server to delete it from database
+                  if (confirmRemove) {
+                    ResetProgressBar();
+                    EmbedController.pause();
+
+                    if (isPlaying) {
+                      isPlaying = false;
+                      playButton.innerHTML = '<i class="fas fa-play"></i>';
+                    }
+                    
+                    if (currentPlaylistId !== null && queueList.length === 0) {
+                      const tracksCount = $(`.playlist-box[data-playlist-id="${currentPlaylistId}"] .tracksCount`);
+                      tracksCount.text(`${parseInt(tracksCount.text().split(' ')[0]) - 1} songs`);
+                      $.ajax({
+                        type: 'POST',
+                        url: '{% url "server:removeTrack" %}',
+                        data: {
+                          'playlistId': currentPlaylistId,
+                          'trackUrl': trackList[currentTrackIndex].trackurl,
+                          'csrfmiddlewaretoken': '{{ csrf_token }}'
+                        },
+                        success: function(response) {
+                          if (response.status === 'success') {
+
+                            if (trackList.length > 0) {
+                              $('#playlist-container').find('.bar').eq(currentTrackIndex).remove();
+                              trackList.splice(currentTrackIndex, 1);
+                              if (currentTrackIndex === trackList.length) {
+                                currentTrackIndex = 0;
+                              } 
+                            }
+
+                            // Remove the current track from the track list and remove it from the UI  
+                            if (trackList.length > 0) {
+                              const musicInfo = {
+                                trackUrl: trackList[currentTrackIndex].trackurl,
+                                image: trackList[currentTrackIndex].image,
+                                title: trackList[currentTrackIndex].name,
+                                album: trackList[currentTrackIndex].album,
+                                artist: trackList[currentTrackIndex].artist,
+                                albumId: trackList[currentTrackIndex].albumId,
+                                artistId: trackList[currentTrackIndex].artistId
+                              };
+                              updateMusicInfo(musicInfo);
+                              newTrack.src = `https://open.spotify.com/embed/track/${trackList[currentTrackIndex].trackurl}?utm_source=generator`;
+                              newTrackUrl = trackList[currentTrackIndex].trackurl;
+                              currentTrackDuration = trackList[currentTrackIndex].duration + 1000;
+                            } else {
+                              updateMusicInfo(null);
+                              newTrack.src = '';
+                              newTrackUrl = null;
+                              currentTrackDuration = null;
+                            };  
+                            console.log('Track removed from the playlist');
+                          } else {
+                            console.log('Failed to remove the track from the playlist');
+                          }
+                        }
+                      }); 
+
+                    } else {
+                      if (queueList.length > 0) {
+                        queueList.splice(0, 1);
+                        updateQueueListDisplay();
+                      } else if (trackList.length > 0 && queueList.length === 0) {
+                        $('#playlist-container').find('.bar').eq(currentTrackIndex).remove();
+                        trackList.splice(currentTrackIndex, 1);
+                        if (currentTrackIndex === trackList.length) {
+                          currentTrackIndex = 0;
+                        } 
+                      };
+
+                      if (queueList.length > 0) {
+                        const musicInfo = {
+                          trackUrl: queueList[0].trackurl,
+                          image: queueList[0].image,
+                          title: queueList[0].name,
+                          album: queueList[0].album,
+                          artist: queueList[0].artist,
+                          albumId: queueList[0].albumId,
+                          artistId: queueList[0].artistId
+                        };
+                        updateMusicInfo(musicInfo);
+                        newTrack.src = `https://open.spotify.com/embed/track/${queueList[0].trackurl}?utm_source=generator`;
+                        newTrackUrl = queueList[0].trackurl;
+                        currentTrackDuration = queueList[0].duration + 1000;
+                      } else if (trackList.length > 0 && queueList.length === 0) {
+                        const musicInfo = {
+                          trackUrl: trackList[currentTrackIndex].trackurl,
+                          image: trackList[currentTrackIndex].image,
+                          title: trackList[currentTrackIndex].name,
+                          album: trackList[currentTrackIndex].album,
+                          artist: trackList[currentTrackIndex].artist,
+                          albumId: trackList[currentTrackIndex].albumId,
+                          artistId: trackList[currentTrackIndex].artistId
+                        };
+                        updateMusicInfo(musicInfo);
+                        newTrack.src = `https://open.spotify.com/embed/track/${trackList[currentTrackIndex].trackurl}?utm_source=generator`;
+                        newTrackUrl = trackList[currentTrackIndex].trackurl;
+                        currentTrackDuration = trackList[currentTrackIndex].duration + 1000;
+                      } else {
+                        updateMusicInfo(null);
+                        newTrack.src = '';
+                        newTrackUrl = null;
+                        currentTrackDuration = null;
+                      };  
+                    }     
+                    
+                    //newPosition = 0;
+                    isTrackChanged = true;
+                  };   
+              });
+          
+              onRepeatButton.addEventListener('click', () => {
+                  if (trackList.length === 0 && queueList.length === 0) {
+                    return;
+                  };   
+                  clearTimeout(timeOut);
+                  isOnRepeat = !isOnRepeat;
+                  onRepeatButton.style.color = isOnRepeat ? '#1ed760' : '#fff';
+              });
+
+              // Shuffle the track list when the shuffle button is clicked
+              playButton.addEventListener('click', () => {
+
+                if (trackList.length === 0 && queueList.length === 0) {
+                  return;
+                };
+                
+                isPlaying = !isPlaying;
+                if (isPlaying) {
+                    playButton.innerHTML = '<i class="fas fa-pause"></i>';
+                    if (newPosition === 0 || newTrackUrl !== null ) {
+                      newTrackUrl = null;
+                      loadTrack(currentTrackIndex);
+                    } else {
+                      EmbedController.resume();
+                    }
+                } else {
+                    playButton.innerHTML = '<i class="fas fa-play"></i>';
+                    EmbedController.pause();
+                    clearTimeout(timeOut);
+                };
+            });
+
+            shuffleButton.addEventListener('click', () => {
+                if (trackList.length === 0 && queueList.length === 0) {
+                  return;
+                };
+                isShuffled = !isShuffled;
+                shuffleButton.style.color = isShuffled ? '#1ed760' : '#fff';
+                if (isShuffled) {
+                  shuffleTrackList();
+                  // Update the queue list display
+                  updateQueueListDisplay();
+                } else {
+                  if (queueList.length > 0) {
+                    queueList = queueList.sort((a, b) => a[0] - b[0]);
+                  } else {
+                    trackList = trackList.sort((a, b) => a[0] - b[0]);
+                  }
+                }
+            });
+        
+            // Load the next or previous track
+            prevButton.addEventListener('click', () => {
+                if (trackList.length === 0 && queueList.length === 0) {
+                  return;
+                };
+
+                if (queueList.length > 0) {
+                  queueList.unshift(queueList.pop());
+                } else {
+                  currentTrackIndex = (currentTrackIndex - 1 + trackList.length) % trackList.length;
+                };
+
+                isPlaying = false;
+
+                loadTrack(currentTrackIndex);
+                
+                //Update the queuelist 
+                updateQueueListDisplay();
+
+            });
+            
+            nextButton.addEventListener('click', () => {
+                if (trackList.length === 0 && queueList.length === 0) {
+                  return;
+                };
+
+                if (queueList.length > 0) {
+                  queueList.push(queueList.shift());
+                } else {
+                  currentTrackIndex = (currentTrackIndex + 1) % trackList.length;
+                };
+                
+                isPlaying = false;
+
+                loadTrack(currentTrackIndex);
+
+                updateQueueListDisplay();
+            });
+
+            function UpdateTrackInfo() {
+                prevTrackIndex = currentTrackIndex;
+                if (queueList.length > 0) {
+                  currentTrackDuration = queueList[0].duration + 1000;
+                  currentArtist = queueList[0].artist;
+                  currentTrack = queueList[0].name;
+                  currentAlbum = queueList[0].album;
+                  currentTrackImage = queueList[0].image;
+                  currentReleaseDate = queueList[0].published_date;
+                } else {
+                  currentTrackDuration = trackList[currentTrackIndex].duration + 1000;
+                  currentArtist = trackList[currentTrackIndex].artist;
+                  currentTrack = trackList[currentTrackIndex].name;
+                  currentAlbum = trackList[currentTrackIndex].album;
+                  currentTrackImage = trackList[currentTrackIndex].image;
+                  currentReleaseDate = trackList[currentTrackIndex].published_date;
+                };
+
+                const musicInfo = {
+                  trackUrl: queueList.length > 0 ? queueList[0].trackurl : trackList[currentTrackIndex].trackurl,
+                  image: currentTrackImage,
+                  title: currentTrack,
+                  album: currentAlbum,
+                  artist: currentArtist,
+                  albumId: queueList.length > 0 ? queueList[0].albumId : trackList[currentTrackIndex].albumId,
+                  artistId: queueList.length > 0 ? queueList[0].artistId : trackList[currentTrackIndex].artistId
+                };
+                updateMusicInfo(musicInfo);
+            };
+            
+            // Load the selected track
+            function loadTrack(currentTrackIndex) {
+              if (trackList.length === 0 && queueList.length === 0) {
+                return;
+              };
+
+              let trackUrl;
+              if (queueList.length > 0) {
+                trackUrl = queueList[0].trackurl;
+              } else {
+                trackUrl = trackList[currentTrackIndex].trackurl;
+              };
+              
+              UpdateTrackInfo();
+              
+              if (progress.style.width !== '100%') {
+                isTrackChanged = true;
+              }
+
+              clearTimeout(loadingTrack);
+              clearInterval(progressInterval);
+              ResetProgressBar();
+              EmbedController.pause();
+
+              loadingTrack = setTimeout(() => {
+                console.log('Track loaded');
+                EmbedController.loadUri(`spotify:track:${trackUrl}`);
+                newPosition = 0
+                setTimeout(() => {
+                  EmbedController.play();
+                  isPlaying = true;
+                  playButton.innerHTML = '<i class="fas fa-pause"></i>';
+                  updateProgressBar();
+                }, 500);
+              }, 1000);
+            };
+            // Shuffle the track list
+            function shuffleTrackList() {
+              if (queueList.length > 0) {
+                  let currentIndex = queueList.length, randomIndex;
+                  while (currentIndex != 0) {
+                    randomIndex = Math.floor(Math.random() * currentIndex);
+                    currentIndex--;
+                    [queueList[currentIndex], queueList[randomIndex]] = [queueList[randomIndex], queueList[currentIndex]];
+                  }
+              } else {
+                  let currentIndex = trackList.length, randomIndex;
+                  while (currentIndex != 0) {
+                    randomIndex = Math.floor(Math.random() * currentIndex);
+                    currentIndex--;
+                    [trackList[currentIndex], trackList[randomIndex]] = [trackList[randomIndex], trackList[currentIndex]];
+                  }
+              }
+              currentTrackIndex = 0;
+              if (queueList.length > 0) {
+                isPlaying = false;
+                loadTrack(currentTrackIndex);
+              }
+            };
+        
+          };
+          IFrameAPI.createController(element, options, callback);
+      };
+  } catch (error) {
+      window.location.href = "{% url 'server:index' %}";
+  }
+
+</script>
+<script src="https://open.spotify.com/embed/iframe-api/v1"></script>
+{% endblock %}

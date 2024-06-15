@@ -1,0 +1,839 @@
+@font-face {
+  font-display: swap;
+  font-family: CircularSp-Deva;
+  font-weight: 900;
+  src: url(https://encore.scdn.co/fonts/CircularSp-Deva-Black-409aaab18f0fc439f0658d5556df302b.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSp-Deva-Black-f1dca2ee660273063af0316d4b7da438.woff) format("woff");
+  unicode-range: u+0000,u+000d,u+0020,u+00a0,u+00a4,u+00b6-00b7,u+0901-097f,u+200c-200e,u+ffff
+}
+
+@font-face {
+  font-display: swap;
+  font-family: CircularSp-Grek;
+  font-weight: 900;
+  src: url(https://encore.scdn.co/fonts/CircularSp-Grek-Black-b45055a950eac7560342cb7fa07559ad.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSp-Grek-Black-49883536c1a3bfc688235ce40572731d.woff) format("woff");
+  unicode-range: u+0000,u+000d,u+0020,u+00a0,u+00a4,u+00b6-00b7,u+0375,u+037a,u+0384,u+0386,u+0388-038a,u+038c,u+038e-03a1,u+03a3-03cf,u+03d7,u+2126,u+ffff
+}
+
+@font-face {
+  font-display: swap;
+  font-family: CircularSpTitle;
+  font-weight: 900;
+  src: url(https://encore.scdn.co/fonts/CircularSpTitle-Black-4588c99025b967475c31695b0743dd1a.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSpTitle-Black-506746f387a26f25aa3d023b3e501d34.woff) format("woff");
+  unicode-range: u+0000,u+000d,u+0020-007e,u+00a0-017e,u+018f,u+0192,u+01a0-01a1,u+01af-01b0,u+01b5-01b6,u+01c4-01c6,u+01f1-01f3,u+01fa-01ff,u+0218-021b,u+0237,u+0259,u+02bb-02bc,u+02c6-02c7,u+02c9,u+02d8-02dd,u+0300-0301,u+0303,u+0309,u+0323,u+0394,u+03a9,u+03bc,u+03c0,u+1e80-1e85,u+1e8a-1e8b,u+1ea0-1ef9,u+1fd6,u+2007-2008,u+200b,u+2010-2011,u+2013-2014,u+2018-201a,u+201c-201e,u+2020-2022,u+2026,u+2030,u+2032-2033,u+2039-203a,u+2042,u+2044,u+2051,u+2070,u+2074-2079,u+2080-2089,u+20ab-20ac,u+2113,u+2117,u+2122,u+2126,u+2160-2169,u+216c-216f,u+2190-2193,u+2196-2199,u+21a9,u+21b0-21b5,u+21c6,u+2202,u+2206,u+220f,u+2211-2212,u+2215,u+2219-221a,u+221e,u+222b,u+2248,u+2260,u+2264-2265,u+22c5,u+24c5,u+25a0-25a1,u+25af,u+25b2-25b3,u+25ca-25cb,u+25cf,u+262e,u+2713,u+2715,u+2780-2788,u+e000,u+e002,u+f6c3,u+fb00-fb04,u+feff,u+ff0c,u+ff0e,u+ff1a-ff1b,u+ffff
+}
+
+@font-face {
+  font-display: swap;
+  font-family: CircularSpTitle;
+  font-weight: 700;
+  src: url(https://encore.scdn.co/fonts/CircularSpTitle-Bold-b2586b06a2e1522e9d879d84c2792a58.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSpTitle-Bold-1624fb2df28c20d7203d7fb86ce8b481.woff) format("woff");
+  unicode-range: u+0000,u+000d,u+0020-007e,u+00a0-017e,u+018f,u+0192,u+01a0-01a1,u+01af-01b0,u+01b5-01b6,u+01c4-01c6,u+01f1-01f3,u+01fa-01ff,u+0218-021b,u+0237,u+0259,u+02bb-02bc,u+02c6-02c7,u+02c9,u+02d8-02dd,u+0300-0301,u+0303,u+0309,u+0323,u+0394,u+03a9,u+03bc,u+03c0,u+1e80-1e85,u+1e8a-1e8b,u+1ea0-1ef9,u+1fd6,u+2007-2008,u+200b,u+2010-2011,u+2013-2014,u+2018-201a,u+201c-201e,u+2020-2022,u+2026,u+2030,u+2032-2033,u+2039-203a,u+2042,u+2044,u+2051,u+2070,u+2074-2079,u+2080-2089,u+20ab-20ac,u+2113,u+2117,u+2122,u+2126,u+2160-2169,u+216c-216f,u+2190-2193,u+2196-2199,u+21a9,u+21b0-21b5,u+21c6,u+2202,u+2206,u+220f,u+2211-2212,u+2215,u+2219-221a,u+221e,u+222b,u+2248,u+2260,u+2264-2265,u+22c5,u+24c5,u+25a0-25a1,u+25af,u+25b2-25b3,u+25ca-25cb,u+25cf,u+262e,u+2713,u+2715,u+2780-2788,u+e000,u+e002,u+f6c3,u+fb00-fb04,u+feff,u+ff0c,u+ff0e,u+ff1a-ff1b,u+ffff
+}
+
+@font-face {
+  font-display: swap;
+  font-family: CircularSp;
+  font-weight: 700;
+  src: url(https://encore.scdn.co/fonts/CircularSp-Bold-602e7aefc706aa36c6ec1324b9bbc461.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSp-Bold-856afe2da4ba4e61239b129e2c16d633.woff) format("woff");
+  unicode-range: u+0000,u+000d,u+0020-007e,u+00a0-017e,u+018f,u+0192,u+01a0-01a1,u+01af-01b0,u+01b5-01b6,u+01c4-01c6,u+01f1-01f3,u+01fa-01ff,u+0218-021b,u+0237,u+0259,u+02bb-02bc,u+02c6-02c7,u+02c9,u+02d8-02dd,u+0300-0301,u+0303,u+0309,u+0323,u+0394,u+03a9,u+03bc,u+03c0,u+1e80-1e85,u+1e8a-1e8b,u+1ea0-1ef9,u+1fd6,u+2007-2008,u+200b,u+2010-2011,u+2013-2014,u+2018-201a,u+201c-201e,u+2020-2022,u+2026,u+2030,u+2032-2033,u+2039-203a,u+2042,u+2044,u+2051,u+2070,u+2074-2079,u+2080-2089,u+20ab-20ac,u+2113,u+2117,u+2122,u+2126,u+2160-2169,u+216c-216f,u+2190-2193,u+2196-2199,u+21a9,u+21b0-21b5,u+21c6,u+2202,u+2206,u+220f,u+2211-2212,u+2215,u+2219-221a,u+221e,u+222b,u+2248,u+2260,u+2264-2265,u+22c5,u+24c5,u+25a0-25a1,u+25af,u+25b2-25b3,u+25ca-25cb,u+25cf,u+262e,u+2713,u+2715,u+2780-2788,u+e000,u+e002,u+f6c3,u+fb00-fb04,u+feff,u+ff0c,u+ff0e,u+ff1a-ff1b,u+ffff
+}
+
+@font-face {
+  font-display: swap;
+  font-family: CircularSp;
+  font-weight: 400;
+  src: url(https://encore.scdn.co/fonts/CircularSp-Book-a00e99ef9996a3a157fb6b746856d04f.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSp-Book-3f73da7d35bd81c706bce7bbb84964de.woff) format("woff");
+  unicode-range: u+0000,u+000d,u+0020-007e,u+00a0-017e,u+018f,u+0192,u+01a0-01a1,u+01af-01b0,u+01b5-01b6,u+01c4-01c6,u+01f1-01f3,u+01fa-01ff,u+0218-021b,u+0237,u+0259,u+02bb-02bc,u+02c6-02c7,u+02c9,u+02d8-02dd,u+0300-0301,u+0303,u+0309,u+0323,u+0394,u+03a9,u+03bc,u+03c0,u+1e80-1e85,u+1e8a-1e8b,u+1ea0-1ef9,u+1fd6,u+2007-2008,u+200b,u+2010-2011,u+2013-2014,u+2018-201a,u+201c-201e,u+2020-2022,u+2026,u+2030,u+2032-2033,u+2039-203a,u+2042,u+2044,u+2051,u+2070,u+2074-2079,u+2080-2089,u+20ab-20ac,u+2113,u+2117,u+2122,u+2126,u+2160-2169,u+216c-216f,u+2190-2193,u+2196-2199,u+21a9,u+21b0-21b5,u+21c6,u+2202,u+2206,u+220f,u+2211-2212,u+2215,u+2219-221a,u+221e,u+222b,u+2248,u+2260,u+2264-2265,u+22c5,u+24c5,u+25a0-25a1,u+25af,u+25b2-25b3,u+25ca-25cb,u+25cf,u+262e,u+2713,u+2715,u+2780-2788,u+e000,u+e002,u+f6c3,u+fb00-fb04,u+feff,u+ff0c,u+ff0e,u+ff1a-ff1b,u+ffff
+}
+
+@font-face {
+  font-display: swap;
+  font-family: CircularSp-Arab;
+  font-weight: 900;
+  src: url(https://encore.scdn.co/fonts/CircularSp-Arab-Black-14419efc36612ec0a627c8ad1e7ae3cf.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSp-Arab-Black-9dda323448d48d7e6cabf84d2df7dc11.woff) format("woff");
+  unicode-range: u+0000,u+000d,u+0020,u+00a0,u+00a4,u+00b6-00b7,u+01c4-01c6,u+01f1-01f3,u+02bb-02bc,u+0600-0603,u+060b-060c,u+0610,u+061b,u+061f,u+0621-063a,u+0640-0659,u+0660-0671,u+0679-0681,u+0683-068a,u+068c-068d,u+068f,u+0691,u+0693,u+0696,u+0698-069a,u+06a1,u+06a4,u+06a6,u+06a9-06ab,u+06af,u+06b1,u+06b3,u+06ba-06bc,u+06be,u+06c0-06c3,u+06cc-06cd,u+06d0,u+06d2-06d5,u+06f0-06f9,u+06fd-06fe,u+2002-2003,u+2009,u+200c-200f,u+25cc,u+fb50-fb85,u+fb88-fbbb,u+fbbd-fbc1,u+fbe4-fbe9,u+fbfc-fbff,u+fc48,u+fc5e-fc63,u+fd3e-fd3f,u+fdf2,u+fdfc,u+fe80-fefc,u+ffff
+}
+
+@font-face {
+  font-display: swap;
+  font-family: CircularSp-Cyrl;
+  font-weight: 900;
+  src: url(https://encore.scdn.co/fonts/CircularSp-Cyrl-Black-1ce6672693e92d2cb1d04af1690e1f9c.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSp-Cyrl-Black-b4305d9bf82554f631d2636c3ef90c54.woff) format("woff");
+  unicode-range: u+0000,u+000d,u+0020,u+00a0,u+00a4,u+00b6-00b7,u+0400-045f,u+0462-0463,u+0472-0475,u+0490-0493,u+049a-049b,u+04a2-04a3,u+04ae-04b3,u+04ba-04bb,u+04d8-04d9,u+04e8-04e9,u+ffff
+}
+
+@font-face {
+  font-display: swap;
+  font-family: CircularSp-Hebr;
+  font-weight: 900;
+  src: url(https://encore.scdn.co/fonts/CircularSp-Hebr-Black-29a8af6f5782cdf3009a5ac966ee4fa6.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSp-Hebr-Black-f52613a9d541248805af1d0bb33102f8.woff) format("woff");
+  unicode-range: u+0000,u+000d,u+0020,u+0030-0039,u+00a0,u+00a4,u+00b6-00b7,u+01c4-01c6,u+01f1-01f3,u+02bb-02bc,u+05b0-05c4,u+05d0-05ea,u+05f0-05f4,u+200e-200f,u+20aa,u+fb2a-fb36,u+fb38-fb3c,u+fb3e,u+fb40-fb41,u+fb43-fb44,u+fb46-fb4f,u+ffff
+}
+
+@font-face {
+  font-display: swap;
+  font-family: CircularSp-Deva;
+  font-weight: 800;
+  src: url(https://encore.scdn.co/fonts/CircularSp-Deva-Black-409aaab18f0fc439f0658d5556df302b.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSp-Deva-Black-f1dca2ee660273063af0316d4b7da438.woff) format("woff");
+  unicode-range: u+0000,u+000d,u+0020,u+00a0,u+00a4,u+00b6-00b7,u+0901-097f,u+200c-200e,u+ffff
+}
+
+@font-face {
+  font-display: swap;
+  font-family: CircularSp-Deva;
+  font-weight: 700;
+  src: url(https://encore.scdn.co/fonts/CircularSp-Deva-Bold-b2a990e06d50b37c1516c3d140496934.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSp-Deva-Bold-a218ed3bd8e480245847933a79f4ebfb.woff) format("woff");
+  unicode-range: u+0000,u+000d,u+0020,u+00a0,u+00a4,u+00b6-00b7,u+0901-097f,u+200c-200e,u+ffff
+}
+
+@font-face {
+  font-display: swap;
+  font-family: CircularSp-Deva;
+  font-weight: 400;
+  src: url(https://encore.scdn.co/fonts/CircularSp-Deva-Book-adf5439f4c3e684fd5dd69f64d659efc.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSp-Deva-Book-e1dc3d746b24723f8d3dadb314b97705.woff) format("woff");
+  unicode-range: u+0000,u+000d,u+0020,u+00a0,u+00a4,u+00b6-00b7,u+0901-097f,u+200c-200e,u+ffff
+}
+
+@font-face {
+  font-display: swap;
+  font-family: CircularSp-Grek;
+  font-weight: 800;
+  src: url(https://encore.scdn.co/fonts/CircularSp-Grek-Black-b45055a950eac7560342cb7fa07559ad.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSp-Grek-Black-49883536c1a3bfc688235ce40572731d.woff) format("woff");
+  unicode-range: u+0000,u+000d,u+0020,u+00a0,u+00a4,u+00b6-00b7,u+0375,u+037a,u+0384,u+0386,u+0388-038a,u+038c,u+038e-03a1,u+03a3-03cf,u+03d7,u+2126,u+ffff
+}
+
+@font-face {
+  font-display: swap;
+  font-family: CircularSp-Grek;
+  font-weight: 700;
+  src: url(https://encore.scdn.co/fonts/CircularSp-Grek-Bold-fafb1410c85fe7e6e81c68e609d4b823.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSp-Grek-Bold-53bb923248ba22cf5554bbe5f434c5c8.woff) format("woff");
+  unicode-range: u+0000,u+000d,u+0020,u+00a0,u+00a4,u+00b6-00b7,u+0375,u+037a,u+0384,u+0386,u+0388-038a,u+038c,u+038e-03a1,u+03a3-03cf,u+03d7,u+2126,u+ffff
+}
+
+@font-face {
+  font-display: swap;
+  font-family: CircularSp-Grek;
+  font-weight: 400;
+  src: url(https://encore.scdn.co/fonts/CircularSp-Grek-Book-5d5a3a10aa26b63a2575ce872ad43f07.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSp-Grek-Book-c9de2c0741586c1ab7b6e95541fc7807.woff) format("woff");
+  unicode-range: u+0000,u+000d,u+0020,u+00a0,u+00a4,u+00b6-00b7,u+0375,u+037a,u+0384,u+0386,u+0388-038a,u+038c,u+038e-03a1,u+03a3-03cf,u+03d7,u+2126,u+ffff
+}
+
+@font-face {
+  font-display: swap;
+  font-family: CircularSp-Arab;
+  font-weight: 800;
+  src: url(https://encore.scdn.co/fonts/CircularSp-Arab-Black-14419efc36612ec0a627c8ad1e7ae3cf.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSp-Arab-Black-9dda323448d48d7e6cabf84d2df7dc11.woff) format("woff");
+  unicode-range: u+0000,u+000d,u+0020,u+00a0,u+00a4,u+00b6-00b7,u+01c4-01c6,u+01f1-01f3,u+02bb-02bc,u+0600-0603,u+060b-060c,u+0610,u+061b,u+061f,u+0621-063a,u+0640-0659,u+0660-0671,u+0679-0681,u+0683-068a,u+068c-068d,u+068f,u+0691,u+0693,u+0696,u+0698-069a,u+06a1,u+06a4,u+06a6,u+06a9-06ab,u+06af,u+06b1,u+06b3,u+06ba-06bc,u+06be,u+06c0-06c3,u+06cc-06cd,u+06d0,u+06d2-06d5,u+06f0-06f9,u+06fd-06fe,u+2002-2003,u+2009,u+200c-200f,u+25cc,u+fb50-fb85,u+fb88-fbbb,u+fbbd-fbc1,u+fbe4-fbe9,u+fbfc-fbff,u+fc48,u+fc5e-fc63,u+fd3e-fd3f,u+fdf2,u+fdfc,u+fe80-fefc,u+ffff
+}
+
+@font-face {
+  font-display: swap;
+  font-family: CircularSp-Arab;
+  font-weight: 700;
+  src: url(https://encore.scdn.co/fonts/CircularSp-Arab-Bold-c638a17a6708a3bd51bd2422c3fedcfb.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSp-Arab-Bold-47ca0fd648a183136981f28d0218cef6.woff) format("woff");
+  unicode-range: u+0000,u+000d,u+0020,u+00a0,u+00a4,u+00b6-00b7,u+01c4-01c6,u+01f1-01f3,u+02bb-02bc,u+0600-0603,u+060b-060c,u+0610,u+061b,u+061f,u+0621-063a,u+0640-0659,u+0660-0671,u+0679-0681,u+0683-068a,u+068c-068d,u+068f,u+0691,u+0693,u+0696,u+0698-069a,u+06a1,u+06a4,u+06a6,u+06a9-06ab,u+06af,u+06b1,u+06b3,u+06ba-06bc,u+06be,u+06c0-06c3,u+06cc-06cd,u+06d0,u+06d2-06d5,u+06f0-06f9,u+06fd-06fe,u+2002-2003,u+2009,u+200c-200f,u+25cc,u+fb50-fb85,u+fb88-fbbb,u+fbbd-fbc1,u+fbe4-fbe9,u+fbfc-fbff,u+fc48,u+fc5e-fc63,u+fd3e-fd3f,u+fdf2,u+fdfc,u+fe80-fefc,u+ffff
+}
+
+@font-face {
+  font-display: swap;
+  font-family: CircularSp-Arab;
+  font-weight: 400;
+  src: url(https://encore.scdn.co/fonts/CircularSp-Arab-Book-8c0cff2514cf52ffcc4976fa813c4712.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSp-Arab-Book-1cd31794cbdd53724469ba03e8573dba.woff) format("woff");
+  unicode-range: u+0000,u+000d,u+0020,u+00a0,u+00a4,u+00b6-00b7,u+01c4-01c6,u+01f1-01f3,u+02bb-02bc,u+0600-0603,u+060b-060c,u+0610,u+061b,u+061f,u+0621-063a,u+0640-0659,u+0660-0671,u+0679-0681,u+0683-068a,u+068c-068d,u+068f,u+0691,u+0693,u+0696,u+0698-069a,u+06a1,u+06a4,u+06a6,u+06a9-06ab,u+06af,u+06b1,u+06b3,u+06ba-06bc,u+06be,u+06c0-06c3,u+06cc-06cd,u+06d0,u+06d2-06d5,u+06f0-06f9,u+06fd-06fe,u+2002-2003,u+2009,u+200c-200f,u+25cc,u+fb50-fb85,u+fb88-fbbb,u+fbbd-fbc1,u+fbe4-fbe9,u+fbfc-fbff,u+fc48,u+fc5e-fc63,u+fd3e-fd3f,u+fdf2,u+fdfc,u+fe80-fefc,u+ffff
+}
+
+@font-face {
+  font-display: swap;
+  font-family: CircularSp-Cyrl;
+  font-weight: 800;
+  src: url(https://encore.scdn.co/fonts/CircularSp-Cyrl-Black-1ce6672693e92d2cb1d04af1690e1f9c.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSp-Cyrl-Black-b4305d9bf82554f631d2636c3ef90c54.woff) format("woff");
+  unicode-range: u+0000,u+000d,u+0020,u+00a0,u+00a4,u+00b6-00b7,u+0400-045f,u+0462-0463,u+0472-0475,u+0490-0493,u+049a-049b,u+04a2-04a3,u+04ae-04b3,u+04ba-04bb,u+04d8-04d9,u+04e8-04e9,u+ffff
+}
+
+@font-face {
+  font-display: swap;
+  font-family: CircularSp-Cyrl;
+  font-weight: 700;
+  src: url(https://encore.scdn.co/fonts/CircularSp-Cyrl-Bold-180db050d109afeef4331b1ee551c349.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSp-Cyrl-Bold-7e54bccaf45728c472079785d5cd4519.woff) format("woff");
+  unicode-range: u+0000,u+000d,u+0020,u+00a0,u+00a4,u+00b6-00b7,u+0400-045f,u+0462-0463,u+0472-0475,u+0490-0493,u+049a-049b,u+04a2-04a3,u+04ae-04b3,u+04ba-04bb,u+04d8-04d9,u+04e8-04e9,u+ffff
+}
+
+@font-face {
+  font-display: swap;
+  font-family: CircularSp-Cyrl;
+  font-weight: 400;
+  src: url(https://encore.scdn.co/fonts/CircularSp-Cyrl-Book-cc791a2e69e25c0440792bd855600ca7.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSp-Cyrl-Book-6f078f781ee313e298ad8997fd1ffe3d.woff) format("woff");
+  unicode-range: u+0000,u+000d,u+0020,u+00a0,u+00a4,u+00b6-00b7,u+0400-045f,u+0462-0463,u+0472-0475,u+0490-0493,u+049a-049b,u+04a2-04a3,u+04ae-04b3,u+04ba-04bb,u+04d8-04d9,u+04e8-04e9,u+ffff
+}
+
+@font-face {
+  font-display: swap;
+  font-family: CircularSp-Hebr;
+  font-weight: 800;
+  src: url(https://encore.scdn.co/fonts/CircularSp-Hebr-Black-29a8af6f5782cdf3009a5ac966ee4fa6.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSp-Hebr-Black-f52613a9d541248805af1d0bb33102f8.woff) format("woff");
+  unicode-range: u+0000,u+000d,u+0020,u+0030-0039,u+00a0,u+00a4,u+00b6-00b7,u+01c4-01c6,u+01f1-01f3,u+02bb-02bc,u+05b0-05c4,u+05d0-05ea,u+05f0-05f4,u+200e-200f,u+20aa,u+fb2a-fb36,u+fb38-fb3c,u+fb3e,u+fb40-fb41,u+fb43-fb44,u+fb46-fb4f,u+ffff
+}
+
+@font-face {
+  font-display: swap;
+  font-family: CircularSp-Hebr;
+  font-weight: 700;
+  src: url(https://encore.scdn.co/fonts/CircularSp-Hebr-Bold-9b609e9268a3f9d73732dc3cc375821e.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSp-Hebr-Bold-caa03e4cb8690e726ef1625c7d91a7a5.woff) format("woff");
+  unicode-range: u+0000,u+000d,u+0020,u+0030-0039,u+00a0,u+00a4,u+00b6-00b7,u+01c4-01c6,u+01f1-01f3,u+02bb-02bc,u+05b0-05c4,u+05d0-05ea,u+05f0-05f4,u+200e-200f,u+20aa,u+fb2a-fb36,u+fb38-fb3c,u+fb3e,u+fb40-fb41,u+fb43-fb44,u+fb46-fb4f,u+ffff
+}
+
+@font-face {
+  font-display: swap;
+  font-family: CircularSp-Hebr;
+  font-weight: 400;
+  src: url(https://encore.scdn.co/fonts/CircularSp-Hebr-Book-414f88babad55bb44c9552d9b92504f7.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSp-Hebr-Book-d8209975eafc81a9499df8401a339ddd.woff) format("woff");
+  unicode-range: u+0000,u+000d,u+0020,u+0030-0039,u+00a0,u+00a4,u+00b6-00b7,u+01c4-01c6,u+01f1-01f3,u+02bb-02bc,u+05b0-05c4,u+05d0-05ea,u+05f0-05f4,u+200e-200f,u+20aa,u+fb2a-fb36,u+fb38-fb3c,u+fb3e,u+fb40-fb41,u+fb43-fb44,u+fb46-fb4f,u+ffff
+}
+
+@font-face {
+  font-display: swap;
+  font-family: CircularSpVietnamese;
+  font-weight: 700;
+  src: url(https://encore.scdn.co/fonts/CircularSpVietnamese-Bold-e9e1a3c95ac9706bd3a804e75f4f4631.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSpVietnamese-Bold-edc4dae184d959b625d5bb67dba44a27.woff) format("woff");
+  unicode-range: u+0020-007e,u+00a0-00ac,u+00ae-0137,u+0139-0148,u+014a-017e,u+018f,u+01a0-01a1,u+01af-01b0,u+01cd-01d4,u+01e6-01e7,u+01f4-01f5,u+01fa-01ff,u+0218-021b,u+0226-0227,u+0232-0233,u+0237,u+0259,u+02bc,u+02c6-02c7,u+02d8-02dd,u+0300-0304,u+0306-030c,u+0312,u+031b,u+0323,u+0326-0328,u+0335-0338,u+0394,u+03a9,u+03bc,u+03c0,u+0e3f,u+1e0c-1e0d,u+1e20-1e21,u+1e24-1e25,u+1e36-1e37,u+1e44-1e45,u+1e56-1e57,u+1e62-1e63,u+1e6c-1e6d,u+1e80-1e85,u+1e8a-1e8d,u+1e92-1e93,u+1e9e,u+1ea0-1ef9,u+2002-2003,u+2009-200a,u+2010-2011,u+2013-2015,u+2018-201a,u+201c-201e,u+2020-2022,u+2026,u+2030,u+2032-2033,u+2039-203a,u+2044,u+2070,u+2074-2079,u+2080-2089,u+20a6,u+20a9-20aa,u+20ac,u+20b4,u+20b8-20ba,u+20bd,u+20bf,u+2113,u+2116-2117,u+2122,u+2126,u+2160-2169,u+216c-216f,u+2190-2193,u+2196-2199,u+2202,u+2206,u+220f,u+2211-2212,u+2215,u+221a,u+221e,u+222b,u+2248,u+2260,u+2264-2265,u+fb01-fb02,u+ffff
+}
+
+@font-face {
+  font-display: swap;
+  font-family: CircularSpVietnamese;
+  font-weight: 400;
+  src: url(https://encore.scdn.co/fonts/CircularSpVietnamese-Regular-25254eecedd0d2c685d884be9846962b.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSpVietnamese-Regular-c9b854c5c634fa9f345c2992d1dfeadd.woff) format("woff");
+  unicode-range: u+0020-007e,u+00a0-00ac,u+00ae-0137,u+0139-0148,u+014a-017e,u+018f,u+01a0-01a1,u+01af-01b0,u+01cd-01d4,u+01e6-01e7,u+01f4-01f5,u+01fa-01ff,u+0218-021b,u+0226-0227,u+0232-0233,u+0237,u+0259,u+02bc,u+02c6-02c7,u+02d8-02dd,u+0300-0304,u+0306-030c,u+0312,u+031b,u+0323,u+0326-0328,u+0335-0338,u+0394,u+03a9,u+03bc,u+03c0,u+0e3f,u+1e0c-1e0d,u+1e20-1e21,u+1e24-1e25,u+1e36-1e37,u+1e44-1e45,u+1e56-1e57,u+1e62-1e63,u+1e6c-1e6d,u+1e80-1e85,u+1e8a-1e8d,u+1e92-1e93,u+1e9e,u+1ea0-1ef9,u+2002-2003,u+2009-200a,u+2010-2011,u+2013-2015,u+2018-201a,u+201c-201e,u+2020-2022,u+2026,u+2030,u+2032-2033,u+2039-203a,u+2044,u+2070,u+2074-2079,u+2080-2089,u+20a6,u+20a9-20aa,u+20ac,u+20b4,u+20b8-20ba,u+20bd,u+20bf,u+2113,u+2116-2117,u+2122,u+2126,u+2160-2169,u+216c-216f,u+2190-2193,u+2196-2199,u+2202,u+2206,u+220f,u+2211-2212,u+2215,u+221a,u+221e,u+222b,u+2248,u+2260,u+2264-2265,u+fb01-fb02,u+ffff
+}
+
+@font-face {
+  font-display: swap;
+  font-family: CircularSpVietnameseTitle;
+  font-weight: 800;
+  src: url(https://encore.scdn.co/fonts/CircularSpVietnameseTitle-Variable-7658d9c8211dd8a6b350b6507f7fdd1a.woff2) format("woff2 supports variations"),url(https://encore.scdn.co/fonts/CircularSpVietnameseTitle-Variable-7658d9c8211dd8a6b350b6507f7fdd1a.woff2) format("woff2-variations"),url(https://encore.scdn.co/fonts/CircularSpVietnameseTitle-Extrabold-ddcdc793890f945f9544f67a152a4165.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSpVietnameseTitle-Extrabold-8c25b5f2bcdcb01fa5891cf47627a617.woff) format("woff");
+  unicode-range: u+0020-007e,u+00a0-00ac,u+00ae-0137,u+0139-0148,u+014a-017e,u+018f,u+01a0-01a1,u+01af-01b0,u+01cd-01d4,u+01e6-01e7,u+01f4-01f5,u+01fa-01ff,u+0218-021b,u+0226-0227,u+0232-0233,u+0237,u+0259,u+02bc,u+02c6-02c7,u+02d8-02dd,u+0300-0304,u+0306-030c,u+0312,u+031b,u+0323,u+0326-0328,u+0335-0338,u+0394,u+03a9,u+03bc,u+03c0,u+0e3f,u+1e0c-1e0d,u+1e20-1e21,u+1e24-1e25,u+1e36-1e37,u+1e44-1e45,u+1e56-1e57,u+1e62-1e63,u+1e6c-1e6d,u+1e80-1e85,u+1e8a-1e8d,u+1e92-1e93,u+1e9e,u+1ea0-1ef9,u+2002-2003,u+2009-200a,u+2010-2011,u+2013-2015,u+2018-201a,u+201c-201e,u+2020-2022,u+2026,u+2030,u+2032-2033,u+2039-203a,u+2044,u+2070,u+2074-2079,u+2080-2089,u+20a6,u+20a9-20aa,u+20ac,u+20b4,u+20b8-20ba,u+20bd,u+20bf,u+2113,u+2116-2117,u+2122,u+2126,u+2160-2169,u+216c-216f,u+2190-2193,u+2196-2199,u+2202,u+2206,u+220f,u+2211-2212,u+2215,u+221a,u+221e,u+222b,u+2248,u+2260,u+2264-2265,u+fb01-fb02,u+ffff
+}
+
+@font-face {
+  font-display: swap;
+  font-family: CircularSpVietnameseTitle;
+  font-weight: 700;
+  src: url(https://encore.scdn.co/fonts/CircularSpVietnameseTitle-Variable-7658d9c8211dd8a6b350b6507f7fdd1a.woff2) format("woff2 supports variations"),url(https://encore.scdn.co/fonts/CircularSpVietnameseTitle-Variable-7658d9c8211dd8a6b350b6507f7fdd1a.woff2) format("woff2-variations"),url(https://encore.scdn.co/fonts/CircularSpVietnameseTitle-Bold-225fe9c9441c34abf68a2de700f7e868.woff2) format("woff2"),url(https://encore.scdn.co/fonts/CircularSpVietnameseTitle-Bold-7586b7047f60d3a2e0e7d21df14c568d.woff) format("woff");
+  unicode-range: u+0020-007e,u+00a0-00ac,u+00ae-0137,u+0139-0148,u+014a-017e,u+018f,u+01a0-01a1,u+01af-01b0,u+01cd-01d4,u+01e6-01e7,u+01f4-01f5,u+01fa-01ff,u+0218-021b,u+0226-0227,u+0232-0233,u+0237,u+0259,u+02bc,u+02c6-02c7,u+02d8-02dd,u+0300-0304,u+0306-030c,u+0312,u+031b,u+0323,u+0326-0328,u+0335-0338,u+0394,u+03a9,u+03bc,u+03c0,u+0e3f,u+1e0c-1e0d,u+1e20-1e21,u+1e24-1e25,u+1e36-1e37,u+1e44-1e45,u+1e56-1e57,u+1e62-1e63,u+1e6c-1e6d,u+1e80-1e85,u+1e8a-1e8d,u+1e92-1e93,u+1e9e,u+1ea0-1ef9,u+2002-2003,u+2009-200a,u+2010-2011,u+2013-2015,u+2018-201a,u+201c-201e,u+2020-2022,u+2026,u+2030,u+2032-2033,u+2039-203a,u+2044,u+2070,u+2074-2079,u+2080-2089,u+20a6,u+20a9-20aa,u+20ac,u+20b4,u+20b8-20ba,u+20bd,u+20bf,u+2113,u+2116-2117,u+2122,u+2126,u+2160-2169,u+216c-216f,u+2190-2193,u+2196-2199,u+2202,u+2206,u+220f,u+2211-2212,u+2215,u+221a,u+221e,u+222b,u+2248,u+2260,u+2264-2265,u+fb01-fb02,u+ffff
+}
+
+
+html {
+  --fallback-fonts: Helvetica Neue, helvetica, arial, Hiragino Kaku Gothic ProN, Meiryo, MS Gothic;
+}
+
+* {
+  font-family: CircularSp, CircularSp-Arab, CircularSp-Hebr, CircularSp-Cyrl, CircularSp-Grek, CircularSp-Deva, var(--fallback-fonts, sans-serif);
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  outline: none;
+  transition: all 0.3s;
+}
+
+body {
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  position: relative;
+  background-repeat: no-repeat;
+  font-family: 'Circular', sans-serif;
+  background-color: #282828;
+  color: #ffffff;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: #1DB954;
+}
+
+img {
+  object-fit: cover;
+  object-position: center;
+  transition: all 0.3s;
+  animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.d-none{display:none!important;}
+
+.flex-box {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.flex-box > label, .flex-box > p {
+  color: #ffffff;
+  font-size: 3.5vmin;
+}
+
+.flex-box > label {
+  margin-right: 10px;
+}
+
+@media screen and (max-width: 768px) {
+  .flex-box {
+    flex-direction: column;
+  }
+  .flex-box > label, .flex-box > p {
+    font-size: 6vmin;
+  }
+
+  .flex-box > p {
+    margin-bottom: 10px;
+  }
+  
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.focused {
+  background-color: #5b5b5bcc;
+  font-weight: bold;
+}
+
+/* Button styles */
+.btn-primary {
+  background-color: #1ed760;
+  border-color: #1ed760;
+  color: #ffffff;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.btn-primary:hover {
+  background-color: #1ab954;
+  border-color: #1ab954;
+}
+
+span, p {
+  font-size: 2.1vmin;
+}
+
+span {
+  white-space: nowrap;
+}
+
+h4 {
+  font-size: 2.5vmin;
+}
+
+.container {
+  background-color: #1c1c1c;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.music-player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #282828;
+  padding: 20px;
+  position: relative;
+}
+
+.music-info {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.music-controls, .mobile-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.music-controls button, .mobile-buttons button {
+  background-color: #fff;
+  color: #1DB954;
+  border: none;
+  padding: 10px 20px;
+  margin: 0 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.music-controls button:hover {
+  background-color: rgba(242, 242, 242, 0.5);
+}
+
+.title,
+.artist {
+  color: #fff;
+}
+
+.title {
+  font-size: 2rem;
+}
+
+.artist {
+  font-size: 1.5rem;
+}
+
+.form-control {
+  background-color: #282828;
+  padding: 15px;
+  width: -webkit-fill-available;
+  border-radius: 10px;
+  border: 1px solid #fff;
+  margin-bottom: 10px;
+}
+
+#generate-btn {
+    margin: 0 !important;
+}
+
+.form-control::placeholder {
+  color: #fff;
+}
+
+.form-control:focus {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.btn {
+  background-color: #1DB954;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  margin: 0 6px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  background-color: #fff;
+  color: #1DB954;
+  border: none;
+  padding: 10px 20px;
+  margin: 0 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.btn:hover {
+  background-color: #f2f2f2;
+}
+
+.btn-secondary:hover {
+  background-color: #f2f2f2;
+}
+
+.text-neon {
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 0 5px #1DB954, 0 0 10px #1DB954, 0 0 15px #1DB954, 0 0 20px #1DB954, 0 0 30px #1DB954, 0 0 40px #1DB954, 0 0 55px #1DB954, 0 0 75px #1DB954;
+}
+
+.modal-placeholder {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    border-radius: 10px;
+  }
+
+  .modal-placeholder:focus{
+    border-color:rgb(104, 180, 247)!important;
+    outline:0;
+    -webkit-box-shadow:0 0 0 0.2rem rgba(81, 174, 190, 0.25);
+    box-shadow:0 0 0 0.2rem rgba(81, 174, 190, 0.25)
+  }
+ 
+  /* Set a style for all buttons */
+  .modal-btn {
+    background-color: #2b2b2b;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  .modal-btn:hover {
+    opacity: 0.8;
+  }
+  
+  /* Extra styles for the cancel button */
+  .cancelbtn {
+    width: auto;
+    padding: 10px 18px;
+    background-color: #f44336;
+  }
+  
+  /* Center the image and position the close button */
+  .imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+    position: relative;
+  }
+  
+  img.avatar {
+    width: 40%;
+    border-radius: 50%;
+  }
+/*   
+  .container {
+    padding: 16px;
+  }
+   */
+  span.psw {
+    float: right;
+    padding-top: 16px;
+  }
+  
+  /* The Modal (background) */
+  .modal {
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    padding-top: 60px;
+  }
+  
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+    border: 1px solid #888;
+    width: 50%; /* Could be more or less, depending on screen size */
+  }
+  
+  /* The Close Button (x) */
+  .close {
+    position: absolute;
+    right: 25px;
+    top: -25px;
+    color: #000;
+    font-size: 35px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: red;
+    cursor: pointer;
+  }
+  
+  /* Add Zoom Animation */
+  .animate {
+    -webkit-animation: animatezoom 0.6s;
+    animation: animatezoom 0.6s
+  }
+  
+  @-webkit-keyframes animatezoom {
+    from {-webkit-transform: scale(0)} 
+    to {-webkit-transform: scale(1)}
+  }
+    
+  @keyframes animatezoom {
+    from {transform: scale(0)} 
+    to {transform: scale(1)}
+  }
+  
+  /* Change styles for span and cancel button on extra small screens */
+  @media screen and (max-width: 300px) {
+    span.psw {
+       display: block;
+       float: none;
+    }
+    .cancelbtn {
+       width: 100%;
+    }
+  }
+
+
+  .slideshow-container {
+    position: relative;
+  }
+  
+  .prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -22px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 5px;
+    user-select: none;
+  }
+  
+  .next {
+    right: 0;
+    border-radius: 5px;
+  }
+  
+  .prev:hover, .next:hover {
+    background-color: rgba(0,0,0,0.8);
+  }
+  
+  .dot {
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+  }
+  
+  .dotactive, .dot:hover {
+    background-color: #717171;
+  }
+  
+  .fade {
+    animation-name: fade;
+    animation-duration: 1.5s;
+  }
+  
+  @keyframes fade {
+    from {opacity: .4} 
+    to {opacity: 1}
+  }
+  
+  @media only screen and (max-width: 300px) {
+    .prev, .next,.text {font-size: 11px}
+  }
+
+
+.modal-scale {
+width: 50%;
+}
+
+@media screen and (max-width: 968px) {
+
+.modal-scale {
+    width: 70%;
+}
+}
+@media screen and (max-width: 568px) {
+.modal-scale {
+    width: 80%;
+}
+}
+
+.select {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 300px;
+    gap: 1px;
+}
+.select__item {
+    white-space: nowrap;
+    padding: 4vw 4vw;
+    cursor: pointer;
+    font-family: CircularSp, CircularSp-Arab, CircularSp-Hebr, CircularSp-Cyrl, CircularSp-Grek, CircularSp-Deva, var(--fallback-fonts, sans-serif);
+    text-align: center;
+    font-size: 1vw;
+    font-weight:600;
+    border-radius: 3px;
+    background: #ffffff;
+    transition: background 1s;
+}
+@media screen and (max-width: 968px) {
+.select__item {
+    white-space: nowrap;
+    padding: 6vw 5vw;
+    font-size: 2vw;
+    font-weight:600;
+}
+}
+@media screen and (max-width: 568px) {
+.select__item {
+    white-space: nowrap;
+    padding: 6vw 2vw;
+    font-size: 2.6vw;
+    font-weight:600;
+}
+}
+.select__item--selected, .select__item:hover {
+    background: linear-gradient(90deg, #3f51b5, transparent) #2196f3;
+    background-color: #e91e63;
+    color: #ffffff;
+}
+
+.modal-container {
+    color: #191414;
+    padding: 16px;
+}
+
+@media (max-width: 768px) {
+  span, p, input {
+      font-size: 4.5vmin;
+  }
+
+  h4 {
+      font-size: 6vmin;
+  }
+
+  i {
+    font-size: 4vmin;
+  }
+  
+
+  .loginBtn {
+    font-size: 6.5vmin;
+  }
+
+  .music-info {
+    flex-direction: column;
+  }
+
+  .music-controls button {
+    padding: 10px;
+  }
+}
+
+.spotify-button {
+  all: unset;
+  margin: auto;
+  width: fit-content;
+  height: 52px;
+  border-radius: 26px;
+  background-color: #1ED760;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
+  transition: all 300ms ease-in-out;
+  display: flex;
+  justify-content: space-between;
+}
+
+.spotify-button .spotify-icon-wrapper {
+  margin: 1px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #1ed760;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-right: 5px;
+}
+
+.spotify-button .spotify-button-text {
+  display: flex;
+  color: #ffffff;
+  font-size: 16px;
+  letter-spacing: 0.2px;
+  margin-right: 1em;
+  align-items: center;
+}
+
+.spotify-button:hover {
+  box-shadow: 0 0 3px 3px rgba(30, 215, 96, 0.3);
+  cursor: pointer;
+}
+
+.spotify-icon {
+  width: 50px; 
+  height: 50px; 
+  padding: 5px;
+}
+
+.login-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.mobile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #1c1c1c;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+}
+
+.mobile-overlay p {
+  color: lightskyblue !important;
+  font-weight: bold !important;
+}
+
+.overlay-content {
+  background-color: #424242;
+  margin: 40px;
+  padding: 40px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.overlay-content p {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.overlay-content a {
+  font-size: 24px;
+  color: #1ed760;
+  text-decoration: none;
+}
+
+.spotify-logo, .mobile-device {
+  width: 220px;
+  height: auto;
+  margin-bottom: 25px;
+}

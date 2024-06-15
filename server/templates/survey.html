@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div id="surveyForm" class="modal">
+  
+  <form class="modal-content animate modal-scale" action="{% url 'server:survey' %}" method="POST" style='border-radius:10px;'>
+    {% csrf_token %}
+      {% comment %} <div class="imgcontainer"> {% endcomment %}
+        {% comment %} <span onclick="document.getElementById('surveyForm').style.display='none'" class="close" title="Close Modal">&times;</span> {% endcomment %}
+      {% comment %} </div> {% endcomment %}
+      <div id="sform1">
+        <div class="modal-container">
+          <div style="margin-bottom:20px;">
+          <label style="display: block; text-align: center; font-size:3.3vmin;">1. Which culture is your musical preference?</label>
+          </div>
+          <select id="marketbox" name="market" class="custom-select">
+            <option value="VN">Vietnam</option>
+            <option value="KR">Korea</option>
+            <option value="JP">Japan</option>
+            <option value="CN">China</option>
+            <option value="IN">India</option>
+            <option value="US">US</option>
+            <option value="UK">UK</option>
+            <option value="EU">EU</option>
+          </select>
+          <div id="footer1">
+          <button id="s1-next" class = "modal-btn" type="button">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="sform2" class="d-none">
+        <div class="modal-container">
+          <div style="margin-bottom:20px;">
+            <label style="display: block; text-align: center; font-size:3.3vmin;">2. Which music genre best describes your music taste?</label>
+          </div>
+          <div class="slideshow-container">
+            <h5>Select up to 5 genres:</h5>
+            <div id="selected-genres" style="display: flex; flex-wrap: wrap; gap: 5px; margin: 10px 0;"></div>
+            <div class="mySlides fade">
+              <select name="genre" class="custom-select" multiple="multiple">
+                <option value="pop">Pop</option>
+                <option value="hip-hop">Hip Hop</option>
+                <option value="jazz">Jazz</option>
+                <option value="classical">Classical</option>
+                <option value="r-n-b">R&B</option>
+                <option value="blues">Blues</option>
+                <option value="country">Country</option>
+                <option value="acoustic">Acoustic</option>
+              </select>
+            </div>
+            <div class="mySlides fade">
+              <select name="genre" class="custom-select" multiple="multiple">
+                <option value="romance">Romance</option>
+                <option value="soul">Soul</option>
+                <option value="reggae">Reggae</option>
+                <option value="folk">Folk</option>
+                <option value="samba">Samba</option>
+                <option value="garage">Garage</option>
+                <option value="disco">Disco</option>
+                <option value="rap">Rap</option>
+              </select>                
+            </div>
+            <div class="mySlides fade">
+              <select name="genre" class="custom-select" multiple="multiple">
+                <option value="party">Party</option>
+                <option value="dance">Dance</option>
+                <option value="movies">Movies</option>
+                <option value="latin">Latin</option>
+                <option value="holidays">Holidays</option>
+                <option value="groove">Groove</option>
+                <option value="indie">Indie</option>
+                <option value="house">House</option>
+              </select>    
+            </div>
+            <div class="mySlides fade">
+              <select name="genre" class="custom-select" multiple="multiple">
+                <option value="guitar">Guitar</option>
+                <option value="piano">Piano</option>
+                <option value="violin">Violin</option>
+                <option value="bass">Bass</option>
+                <option value="drum">Drum</option>
+                <option value="opera">Opera</option>
+                <option value="ambient">Ambient</option>
+                <option value="road-trip">Road Trip</option>
+              </select>    
+            </div>
+            <div class="mySlides fade">
+              <select name="genre" class="custom-select" multiple="multiple">
+                <option value="v-pop">V-Pop</option>
+                <option value="k-pop">K-Pop</option>
+                <option value="j-pop">J-Pop</option>
+                <option value="anime">Anime</option>
+                <option value="dubstep">Dubstep</option>
+                <option value="chill">Chill</option>
+                <option value="edm">Edm</option>
+                <option value="lo-fi">Lo-fi</option>
+              </select>    
+            </div>
+            
+            <a class="prev" onclick="plusSlides(-1)">❮</a>
+            <a class="next" onclick="plusSlides(1)">❯</a>
+            
+          </div>
+            
+            <div style="text-align:center; margin-top:20px;">
+              <span class="dot" onclick="currentSlide(1)"></span> 
+              <span class="dot" onclick="currentSlide(2)"></span> 
+              <span class="dot" onclick="currentSlide(3)"></span> 
+              <span class="dot" onclick="currentSlide(4)"></span> 
+              <span class="dot" onclick="currentSlide(5)"></span> 
+            </div>
+          <div id="footer2" style="display:flex;">
+          <button id="s2-prev" class = "modal-btn" type="button">Prev</button>
+          <button id="s2-next" class = "modal-btn" type="button">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="sform3" class="d-none">
+        <div class="modal-container">
+          <div style="margin-bottom:20px;">
+            <label style="display: block; text-align: center; font-size:3.3vmin;">3. What are some of your favorite bands/artists?</label>
+          </div>
+          <div>
+            <h5>Select up to 5 artists:</h5>
+            <div id="artist-alert" style="color: red; display: none;">Please select at least one artist.</div>
+            <input name="query" class="modal-placeholder" placeholder="Search your favorite artists" required autocomplete="off" type="search"
+            hx-get="{% url 'server:search_results_view' %}"
+            hx-trigger="keyup changed, search"
+            hx-target="#search-results"
+            hx-indicator=".htmx-indicator">
+            <div id="search-results">
+              {% include "search_results.html" %}
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; max-width: 100%; max-height: 300px; overflow-y: auto;" id="selected-artists"></div>
+            <input type="hidden" name="singer" id="singer-dict">
+          </div>
+          
+          <div style="display:flex;">
+          <button id="s3-prev" class = "modal-btn" type="button">Prev</button>
+          <button id="s3-next" class = "modal-btn" name="preference" value="1" type="submit">Submit</button>
+          </div>
+        </div>
+      </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src='{% static "js/survey.js" %}'></script>
+{% endblock %}

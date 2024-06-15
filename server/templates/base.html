@@ -1,0 +1,66 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preload" href="https://encore.scdn.co/fonts/CircularSp-Book-a00e99ef9996a3a157fb6b746856d04f.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="https://encore.scdn.co/fonts/CircularSpTitle-Bold-b2586b06a2e1522e9d879d84c2792a58.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="https://encore.scdn.co/fonts/CircularSp-Bold-602e7aefc706aa36c6ec1324b9bbc461.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="https://encore.scdn.co/fonts/CircularSpTitle-Black-4588c99025b967475c31695b0743dd1a.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    <style>
+        @import url(https://fonts.googleapis.com/css2?family=Inter&family=Josefin+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Poppins:wght@400;500;600;700&display=swap);
+    </style>
+    <style>
+        @import url(https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap);
+    </style>
+    <link rel="stylesheet" href="{% static 'css/font-awesome/css/all.css' %}"/> 
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}?{% now 'U' %}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>Spotify Premium @ Home</title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'icon/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'icon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'icon/favicon-16x16.png' %}">
+    <link rel="mask-icon" href="{% static 'icon/safari-pinned-tab.svg' %}" color="#5bbad5">
+    <link rel="manifest" href="{% static 'icon/site.webmanifest' %}">
+    <script text="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            var isMobile = 
+            /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+            window.innerWidth <= 800 ||
+            'ontouchstart' in window ||
+            navigator.maxTouchPoints > 0;
+    
+            if (isMobile) {
+                console.log('Not supported on mobile devices');
+                mobileBlockerOverlay();
+            }
+    
+            function mobileBlockerOverlay() {
+                // Create and display the overlay with a mobile device prompt
+                const overlay = document.createElement('div');
+                overlay.classList.add('mobile-overlay');
+                overlay.innerHTML = `
+                    <div class="overlay-content">
+                        <img src="{% static 'icon/apple-touch-icon.png' %}" alt="Mobile Device" class="mobile-device">
+                        <p>Sorry, Moodify50 is not available on mobile devices yet</p>
+                        <p>Please use a desktop or laptop to access the site</p>
+                    </div>
+                `;
+                document.body.appendChild(overlay);
+            }
+        });
+    </script>
+</head>
+<body>
+    {% block content %}
+    {% endblock %}
+    {% block script %}
+    {% endblock %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+</body>
+</html>

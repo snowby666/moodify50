@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>  
+    .row > label, .row > p {
+        color: #fff;
+        font-size: 3.5vmin;
+        margin-bottom: 15px;
+    }
+
+    .buttonList {
+        display: flex;
+        margin-top: 20px;
+    }
+
+    @media screen and (max-width: 768px) {
+        .row > label, .row > p {
+            font-size: 5vmin;
+        }
+
+        .buttonList {
+            display: grid;
+            gap: 10px;
+        }
+    }
+
+    .pref-p {
+      max-height: 200px !important; 
+      padding-right: 10px;
+      overflow-y: auto;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* Internet Explorer 10+ */
+    }
+
+    
+    /* Show scrollbar on hover */
+    .pref-p:hover {
+      scrollbar-width: auto; /* Firefox */
+      -ms-overflow-style: auto; /* Internet Explorer 10+ */
+    }
+
+    /* WebKit (Chrome, Safari, Opera) */
+    .pref-p::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+
+    .pref-p:hover::-webkit-scrollbar {
+      width: 8px; /* Width of the scrollbar */
+      height: 8px; /* Height of the scrollbar */
+    }
+
+    .pref-p:hover::-webkit-scrollbar-thumb {
+      background-color: #535353; /* Color of the scrollbar thumb */
+      border-radius: 4px; /* Rounded corners of the scrollbar thumb */
+    }
+
+    .pref-p::-webkit-scrollbar-track {
+      background-color: transparent; /* Color of the scrollbar track */
+    }
+
+</style>
+<div class="content">
+  <div class = "music-player" style="background-color: #282828; border-radius: 10px; width: 70vw;">
+      <div style="color: #ffffff; font-size: 4vmin;"><i class="fas fa-music"></i> Your Music Preference</div>
+      <div class="row" style="align-items: self-start; padding: 20px;">
+        <div class="flex-box">
+          <label>Market:</label>
+          <p>{{userMusic.market}}</p>
+        </div>
+        <div class="flex-box"> 
+          <label>Genres:</label>
+          <p>{{ userMusic.load_genre|join:", "}}</p>
+        </div>
+        <div class="flex-box">
+          <label>Artists/Bands:</label>
+          <p class="pref-p">
+            {{ singer_names|join:", " }}
+          </p>
+        </div>
+      </div>
+      <div class="buttonList">
+      <button class="btn btn-primary text-neon" onclick="window.location.href='{% url 'server:index' %}'">Back</button>
+      <button class="btn btn-primary text-neon" onclick="PopUp();">
+          New Preference
+      </button>
+      </div>
+  </div>
+</div>
+
+<div id="surveyForm" class="modal" style="display: none;">
+        
+    <form class="modal-content animate modal-scale" action="{% url 'server:edit' %}" method="POST" style='border-radius:10px;'>
+      {% csrf_token %}
+        <div class="imgcontainer">
+          <span onclick="document.getElementById('surveyForm').style.display='none'" class="close" title="Close Modal">&times;</span>
+        </div>
+        <div id="sform1">
+          <div class="modal-container">
+            <div style="margin-bottom:20px;">
+            <label style="display: block; text-align: center; font-size:3.3vmin;">1. Which culture is your musical preference?</label>
+            </div>
+            <select id="marketbox" name="market" class="custom-select">
+              <option value="VN">Vietnam</option>
+              <option value="KR">Korea</option>
+              <option value="JP">Japan</option>
+              <option value="CN">China</option>
+              <option value="IN">India</option>
+              <option value="US">US</option>
+              <option value="UK">UK</option>
+              <option value="EU">EU</option>
+            </select>
+            <div id="footer1">
+            <button id="s1-next" class = "modal-btn" type="button">Next</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="sform2" class="d-none">
+          <div class="modal-container">
+            <div style="margin-bottom:20px;">
+              <label style="display: block; text-align: center; font-size:3.3vmin;">2. Which music genre best describes your music taste?</label>
+            </div>
+            <div class="slideshow-container">
+              <h5>Select up to 5 genres:</h5>
+              <div id="selected-genres" style="display: flex; flex-wrap: wrap; gap: 5px; margin: 10px 0;"></div>
+              <div class="mySlides fade">
+                <select name="genre" class="custom-select" multiple="multiple">
+                  <option value="pop">Pop</option>
+                  <option value="hip-hop">Hip Hop</option>
+                  <option value="jazz">Jazz</option>
+                  <option value="classical">Classical</option>
+                  <option value="r-n-b">R&B</option>
+                  <option value="blues">Blues</option>
+                  <option value="country">Country</option>
+                  <option value="acoustic">Acoustic</option>
+                </select>
+              </div>
+              <div class="mySlides fade">
+                <select name="genre" class="custom-select" multiple="multiple">
+                  <option value="romance">Romance</option>
+                  <option value="soul">Soul</option>
+                  <option value="reggae">Reggae</option>
+                  <option value="folk">Folk</option>
+                  <option value="samba">Samba</option>
+                  <option value="garage">Garage</option>
+                  <option value="disco">Disco</option>
+                  <option value="rap">Rap</option>
+                </select>                
+              </div>
+              <div class="mySlides fade">
+                <select name="genre" class="custom-select" multiple="multiple">
+                  <option value="party">Party</option>
+                  <option value="dance">Dance</option>
+                  <option value="movies">Movies</option>
+                  <option value="latin">Latin</option>
+                  <option value="holidays">Holidays</option>
+                  <option value="groove">Groove</option>
+                  <option value="indie">Indie</option>
+                  <option value="house">House</option>
+                </select>    
+              </div>
+              <div class="mySlides fade">
+                <select name="genre" class="custom-select" multiple="multiple">
+                  <option value="guitar">Guitar</option>
+                  <option value="piano">Piano</option>
+                  <option value="violin">Violin</option>
+                  <option value="bass">Bass</option>
+                  <option value="drum">Drum</option>
+                  <option value="opera">Opera</option>
+                  <option value="ambient">Ambient</option>
+                  <option value="road-trip">Road Trip</option>
+                </select>    
+              </div>
+              <div class="mySlides fade">
+                <select name="genre" class="custom-select" multiple="multiple">
+                  <option value="v-pop">V-Pop</option>
+                  <option value="k-pop">K-Pop</option>
+                  <option value="j-pop">J-Pop</option>
+                  <option value="anime">Anime</option>
+                  <option value="dubstep">Dubstep</option>
+                  <option value="chill">Chill</option>
+                  <option value="edm">Edm</option>
+                  <option value="lo-fi">Lo-fi</option>
+                </select>    
+              </div>
+              
+              <a class="prev" onclick="plusSlides(-1)">❮</a>
+              <a class="next" onclick="plusSlides(1)">❯</a>
+              
+            </div>
+              
+              <div style="text-align:center; margin-top:20px;">
+                <span class="dot" onclick="currentSlide(1)"></span> 
+                <span class="dot" onclick="currentSlide(2)"></span> 
+                <span class="dot" onclick="currentSlide(3)"></span> 
+                <span class="dot" onclick="currentSlide(4)"></span> 
+                <span class="dot" onclick="currentSlide(5)"></span> 
+              </div>
+            <div id="footer2" style="display:flex;">
+            <button id="s2-prev" class = "modal-btn" type="button">Prev</button>
+            <button id="s2-next" class = "modal-btn" type="button">Next</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="sform3" class="d-none">
+          <div class="modal-container">
+            <div style="margin-bottom:20px;">
+              <label style="display: block; text-align: center; font-size:3.3vmin;">3. What are some of your favorite bands/artists?</label>
+            </div>
+            <div>
+              <h5>Select up to 5 artists:</h5>
+              <div id="artist-alert" style="color: red; display: none;">Please select at least one artist.</div>
+              <input name="query" class="modal-placeholder" placeholder="Search your favorite artists" required autocomplete="off" type="search"
+              hx-get="{% url 'server:search_results_view' %}"
+              hx-trigger="keyup changed, search"
+              hx-target="#search-results"
+              hx-indicator=".htmx-indicator">
+              <div id="search-results">
+                {% include "search_results.html" %}
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; max-width: 100%; max-height: 300px; overflow-y: auto;" id="selected-artists"></div>
+              <input type="hidden" name="singer" id="singer-dict">
+            </div>
+            <div style="display:flex;">
+              <button id="s3-prev" class = "modal-btn" type="button">Prev</button>
+              <button id="s3-next" class = "modal-btn" name="preference" value="1" type="submit">Submit</button>
+            </div>
+          </div>
+        </div>
+    </form>
+  </div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+
+    function PopUp(event) {
+        if ($('#surveyForm').css('display') == 'none')
+        {
+            $('#surveyForm').show();
+        }
+        else {
+            $('#surveyForm').hide();
+        }
+    }
+    
+</script>
+<script src="{% static 'js/survey.js' %}?{% now 'U' %}"></script>
+{% endblock %}

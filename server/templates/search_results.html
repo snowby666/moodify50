@@ -1,0 +1,47 @@
+
+  <style>
+    .remove {
+        background-color: #181818;
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 1.5rem;
+        height: 1.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 10px;
+        cursor: pointer;
+    }
+
+    .artist-survey-result {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .artist-survey-result:hover {
+      cursor: pointer;
+      background-color: #f0f0f0;
+    }
+    .selected-genre {
+        display: inline-block;
+        padding: 5px 10px;
+        border: 2px solid #000;
+        border-radius: 25px;
+        background-color: #ffffff;
+        color: #000;
+        margin-right: 5px;
+        cursor: pointer;
+    }
+  </style>
+  
+  {% for artist in search_results %}
+    <div class="artist-survey-result" data-artist-id="{{ artist.id }}" onclick="addArtist(event, '{{ artist.id }}', '{{ artist.name }}')">
+      <img src="{{ artist.image }}" alt="{{ artist.name }}" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+      <p>{{ artist.name }}</p>
+    </div>
+  {% endfor %}

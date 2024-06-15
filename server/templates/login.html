@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style>
+  body {
+    background-image: url('https://picsum.photos/1600/900.webp/?music');
+  }
+
+  .fa-eye, .fa-eye-slash {
+    color: #ccc;
+    transition: color 0.3s;
+  }
+
+  .fa-eye:hover, .fa-eye-slash:hover {
+      color: #000;
+  }
+</style>
+<div class="content">
+    <div class="music-player" style="border-radius: 10px;">
+        <div class="music-info">
+            <h1 class="title">Welcome</h1>
+            <h2 class="artist">This is Moodify50</h2>
+        </div>
+        <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; width: 500px; text-align: center;">
+            <a class="spotify-button" href='{% url "social:begin" "spotify" %}'>
+                <div class="spotify-icon-wrapper">
+                  <img src="{% static 'icon/spotify.png' %}" alt="Spotify Icon" class="spotify-icon">  
+                </div>
+                <p class="spotify-button-text">Sign in with Spotify</p>
+            </a>
+
+            <div style="display: flex; align-items: center; margin: 20px 0;">
+                <div style="flex: 1; height: 1px; background-color: #ccc; width: 350px;"></div>
+                <div style="margin: 0 10px;">or</div>
+                <div style="flex: 1; height: 1px; background-color: #ccc;"></div>
+            </div>
+
+            <form action="{% url 'server:login' %}" method="post" autocomplete="off" style="width: 75%;">
+                {% csrf_token %}
+                <input type="text" name="username" placeholder="Username" class="modal-placeholder" style="border-radius: 10px; margin-bottom: 10px;" autocomplete="off">
+                <div style="position: relative; display: flex; align-items: center;">
+                  <input type="password" name="password" id="password" placeholder="Password" class="modal-placeholder" style="border-radius: 10px; margin-bottom: 20px;" autocomplete="new-password">
+                  <i id="togglePassword" class="fas fa-eye fa-eye-slash" style="position: absolute; right: 10px; top: 50%; transform: translateY(-75%); cursor: pointer;"></i>
+                </div>
+                <button type="submit" class="btn btn-primary" style="border-radius: 10px; margin:0 auto; width: 100%;">
+                    <span class="text-neon loginBtn">Login</span>
+                </button>
+            </form>
+        </div>
+        <p style="margin: 20px;"><span style="color: #fff;">Don't have an account?</span><a href="{% url 'server:signup' %}"> Register here</a></p>
+        <p>Made with <i style="color: #ff0000;" class="fas fa-heart"></i> by <a href="https://github.com/snowby666">Bao Ngo</a></p>
+    </div>
+</div>
+
+<script>
+  const togglePassword = document.querySelector('#togglePassword');
+  const password = document.querySelector('#password');
+
+  togglePassword.addEventListener('click', function (e) {
+      // toggle the type attribute
+      const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+      password.setAttribute('type', type);
+      // toggle the eye slash icon
+      this.classList.toggle('fa-eye-slash');
+  });
+</script>
+
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style>
+    body {
+      background-image: url('https://picsum.photos/1600/900.webp/?music');
+    }
+</style>
+{% if message %}
+    <div class="alert alert-danger" role="alert">
+        {{ message }}
+    </div>
+{% endif %}
+<div class="content">
+    <div class="music-player" style="border-radius: 10px;">
+        <div class="music-info">
+            <h1 class="title">Register</h1>
+            <h2 class="artist">Create an account</h2>
+        </div>  
+
+        <div class="music-controls">
+            <form action="{% url 'server:signup' %}" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    {{form_user.username}}
+                    {{form_user.password}}
+                    {{form_user.confirm}}
+                    {% comment %} <label data-lang='en' style = 'text-transform : capitalize;'><b>Fullname</b></label>
+                    <label data-lang='vi' style = 'text-transform : capitalize;'><b>Họ và tên</b></label>
+                    {{form_por.fullname}} {% endcomment %}
+                    <button type="submit" class="btn btn-primary" style="border-radius: 10px; margin:0 auto; width: 100%; margin-top: 10px;">
+                        <span class="text-neon">Register</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <p style="margin: 20px;"><span style="color: #fff;">Already have an account?</span><a href="{% url 'server:login' %}"> Login here</a></p>
+        <p>Made with <i style="color: #ff0000;" class="fas fa-heart"></i> by <a href="https://github.com/snowby666">Bao Ngo</a></p>
+    </div>
+</div>
+    
+{% endblock %}
