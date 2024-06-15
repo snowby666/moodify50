@@ -46,6 +46,11 @@
 
 ## Project Overview
 
+<img src="./assets/demo1.png" width="100%" height="auto" style="margin-bottom: 10px; border-radius: 15px; border: 2px solid #fff;">
+<img src="./assets/demo2.png" width="100%" height="auto" style="margin-bottom: 10px; border-radius: 15px; border: 2px solid #fff;">
+<img src="./assets/demo3.png" width="100%" height="auto" style="margin-bottom: 10px; border-radius: 15px; border: 2px solid #fff;">
+<img src="./assets/demo4.png" width="100%" height="auto" style="margin-bottom: 10px; border-radius: 15px; border: 2px solid #fff;">
+
 The project consists of multiple files and directories, each serving a specific purpose in the overall architecture of the platform. The main directory contains the following subdirectories:
 
 * **moodify50**: This directory contains the core application files, including the custom music player, API integrations, and user interface components.
