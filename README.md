@@ -46,14 +46,15 @@
 
 ## Project Overview
 
+<p>
 <kbd><img src="./assets/demo1.png" width="100%" height="auto"></kbd>
-&NewLine;
+
 <kbd><img src="./assets/demo2.png" width="100%" height="auto"></kbd>
-&NewLine;
+
 <kbd><img src="./assets/demo3.png" width="100%" height="auto"></kbd>
-&NewLine;
+
 <kbd><img src="./assets/demo4.png" width="100%" height="auto"></kbd>
-&NewLine;
+</p>
 
 The project consists of multiple files and directories, each serving a specific purpose in the overall architecture of the platform. The main directory contains the following subdirectories:
 
